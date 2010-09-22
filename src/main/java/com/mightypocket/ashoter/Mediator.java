@@ -56,6 +56,7 @@ public final class Mediator {
     private final Map<String, JRadioButtonMenuItem> devices = new HashMap<String, JRadioButtonMenuItem>();
     private final ButtonGroup devicesGroup = new ButtonGroup();
     private BusyAndroidAnimation busyAndroidAnimation;
+    private final ImageSaver imageSaver;
 
     // Constants
 
@@ -70,6 +71,9 @@ public final class Mediator {
     private final MainPanel mainPanel;
     private final AndroDemon demon;
 
+    // State
+    private Image lastImage;
+
     
 
     public Mediator( final AShoter application) {
@@ -82,6 +86,8 @@ public final class Mediator {
 
         statusBar = new StatusBar(this);
         mainPanel = new MainPanel(this);
+
+        imageSaver  = new ImageSaver(this);
 
         demon = new AndroDemon(this);
         installListeners();
@@ -108,13 +114,13 @@ public final class Mediator {
                 List<Image> value = event.getValue();
 
                 if (!value.isEmpty()) {
-                    Image img = value.get(0);
-                    ImageProcessor ip = getImageProcessor();
+                    final Image img = value.get(0);
+                    final ImageProcessor ip = getImageProcessor();
                     
                     if (isScaleFit())
                         ip.setCustomBounds(mainPanel.getPresenterDimension());
 
-                    Image imgp = ip.process(img);
+                    final Image imgp = ip.process(img);
 
                     if (fullScreen) {
                         showOnFullScreen(imgp);
@@ -123,9 +129,10 @@ public final class Mediator {
                     }
 
                     if (autoSave) {
-
-                        saveImage((saveOriginal)?img:imgp, getNextAutoFile());
+                        imageSaver.saveImage((saveOriginal)?img:imgp);
                     }
+
+                    lastImage = img;
                 } else {
                     if (fullScreen) {
                         showOnFullScreen(generateProgresImage());
@@ -133,6 +140,7 @@ public final class Mediator {
                         showOnMainPanel(generateProgresImage());
                     }
                 }
+
             }
 
         });
@@ -258,6 +266,10 @@ public final class Mediator {
         return toolBar;
     }
 
+    public Image getLastImage() {
+        return lastImage;
+    }
+
     public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(propertyName, listener);
     }
@@ -301,19 +313,6 @@ public final class Mediator {
 
     private void showOnMainPanel(Image img) {
         mainPanel.setImage(img);
-    }
-
-    private void saveImage(Image img, File target) {
-        try {
-            ImageIO.write((RenderedImage) img, "PNG", target);
-        } catch (IOException ex) {
-            logger.error("Cannot save image to file.", ex);
-            application.showErrorMessage("error.save.image", target.getPath());
-        }
-    }
-
-    private File getNextAutoFile() {
-        return null;
     }
 
     void addDevice(final String deviceStr) {
@@ -384,7 +383,7 @@ public final class Mediator {
     public static final String ACTION_SAVE_SCREENSHOT = "saveScreenshot";
     @Action(name=ACTION_SAVE_SCREENSHOT, enabledProperty=PROP_CONNECTED)
     public void saveScreenshot() {
-
+        imageSaver.saveImage(lastImage);
     }
 
     public static final String ACTION_START_RECORDING = "startRecording";
@@ -490,6 +489,30 @@ public final class Mediator {
         setConnected(connectedDevice != null);
     }
 
+    private boolean recording;
+    public static final String PROP_RECORDING = "recording";
+    public boolean isRecording() {
+        return recording;
+    }
+
+    public void setRecording(boolean recording) {
+        boolean oldRecording = this.recording;
+        this.recording = recording;
+        pcs.firePropertyChange(PROP_RECORDING, oldRecording, recording);
+        pcs.firePropertyChange(PROP_NOT_RECORDING, oldRecording, recording);
+    }
+
+    public static final String PROP_NOT_RECORDING = "notRecording";
+    public boolean isNotRecording() {
+        return !recording;
+    }
+
+    public void setNotRecording(boolean recording) {
+        boolean oldRecording = this.recording;
+        this.recording = !recording;
+        pcs.firePropertyChange(PROP_RECORDING, oldRecording, !recording);
+        pcs.firePropertyChange(PROP_NOT_RECORDING, oldRecording, recording);
+    }
 
     private boolean autoSave = false;
     public static final String PROP_AUTO_SAVE = "autoSave";

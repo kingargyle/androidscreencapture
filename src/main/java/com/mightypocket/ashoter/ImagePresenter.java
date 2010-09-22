@@ -5,6 +5,7 @@
 
 package com.mightypocket.ashoter;
 
+import java.awt.Dimension;
 import java.awt.Image;
 
 /**
@@ -13,6 +14,5 @@ import java.awt.Image;
  */
 public interface ImagePresenter {
     void setImage(Image img);
-    int getPresenterHeight();
-    int getPresenterWidth();
+    Dimension getPresenterDimension();
 }

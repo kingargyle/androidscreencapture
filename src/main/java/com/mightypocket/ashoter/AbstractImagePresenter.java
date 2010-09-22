@@ -33,15 +33,6 @@ public abstract class AbstractImagePresenter extends JPanel implements ImagePres
     }
 
     @Override
-    public int getPresenterHeight() {
-        return imageLabel.getHeight();
-    }
-
-    @Override
-    public int getPresenterWidth() {
-        return imageLabel.getWidth();
-    }
-
     public Dimension getPresenterDimension() {
         return imageLabel.getParent().getSize();
     }
