@@ -57,7 +57,7 @@ final class ImageSaver implements PreferencesNames {
     }
 
     private File requestFile() {
-        if (mediator.isAutoSave()) {
+        if (mediator.isRecording() || mediator.isAutoSave()) {
             return getNextAutoFile();
         } else {
             JFileChooser d = createFileChooser();

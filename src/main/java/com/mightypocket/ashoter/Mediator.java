@@ -4,6 +4,7 @@
  */
 package com.mightypocket.ashoter;
 
+import javax.swing.AbstractButton;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -30,9 +31,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.SwingPropertyChangeSupport;
+import org.apache.commons.lang.StringUtils;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.TaskEvent;
@@ -128,7 +131,7 @@ public final class Mediator {
                         showOnMainPanel(imgp);
                     }
 
-                    if (autoSave) {
+                    if (isRecording()) {
                         imageSaver.saveImage((saveOriginal)?img:imgp);
                     }
 
@@ -179,8 +182,7 @@ public final class Mediator {
         menuBinding.addBinding( bindRead(this, PROP_DEVICES, menuFileDevices, "enabled"));
         menuFile.addSeparator();
         menuFile.add(new JMenuItem(actionMap.get(ACTION_SAVE_SCREENSHOT)));
-        menuFile.add(new JMenuItem(actionMap.get(ACTION_START_RECORDING)));
-        menuFile.add(new JMenuItem(actionMap.get(ACTION_STOP_RECORDING)));
+        menuFile.add(new JCheckBoxMenuItem(actionMap.get(ACTION_RECORDING)));
         menuFile.add(new JMenuItem(actionMap.get(ACTION_OPEN_DESTINATION_FOLDER)));
         menuFile.addSeparator();
         menuFile.add(new JMenuItem(actionMap.get("quit")));
@@ -227,7 +229,12 @@ public final class Mediator {
             if (TOOLBAR_SEPARATOR.equals(actionName)) {
                 bar.addSeparator();
             } else {
-                JButton bt = new JButton(actionMap.get(actionName));
+                AbstractButton bt;
+                if (actionName.startsWith(TOOLBAR_TOGGLE_BUTTON)) {
+                    bt = new JToggleButton(actionMap.get(StringUtils.substring(actionName, TOOLBAR_TOGGLE_BUTTON.length())));
+                } else {
+                    bt = new JButton(actionMap.get(actionName));
+                }
                 bt.setFocusable(false);
                 bt.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 bt.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -386,16 +393,9 @@ public final class Mediator {
         imageSaver.saveImage(lastImage);
     }
 
-    public static final String ACTION_START_RECORDING = "startRecording";
-    @Action(name=ACTION_START_RECORDING, enabledProperty=PROP_CONNECTED)
-    public void startRecording() {
-
-    }
-
-    public static final String ACTION_STOP_RECORDING = "stopRecording";
-    @Action(name=ACTION_STOP_RECORDING, enabledProperty=PROP_CONNECTED)
-    public void stopRecording() {
-
+    public static final String ACTION_RECORDING = "recording";
+    @Action(name=ACTION_RECORDING, enabledProperty=PROP_CONNECTED, selectedProperty=PROP_RECORDING)
+    public void recording() {
     }
 
     public static final String ACTION_OPEN_DESTINATION_FOLDER = "openDestinationFolder";
@@ -450,7 +450,7 @@ public final class Mediator {
 
     public static final String ACTION_SIZE_SMALL = "sizeSmall";
     @Action(name=ACTION_SIZE_SMALL, selectedProperty=PROP_SCALE_SMALL)
-    public void size50() {
+    public void sizeSmall() {
         getImageProcessor().setScale(ImageProcessor.Scale.SMALL);
     }
 
@@ -499,19 +499,6 @@ public final class Mediator {
         boolean oldRecording = this.recording;
         this.recording = recording;
         pcs.firePropertyChange(PROP_RECORDING, oldRecording, recording);
-        pcs.firePropertyChange(PROP_NOT_RECORDING, oldRecording, recording);
-    }
-
-    public static final String PROP_NOT_RECORDING = "notRecording";
-    public boolean isNotRecording() {
-        return !recording;
-    }
-
-    public void setNotRecording(boolean recording) {
-        boolean oldRecording = this.recording;
-        this.recording = !recording;
-        pcs.firePropertyChange(PROP_RECORDING, oldRecording, !recording);
-        pcs.firePropertyChange(PROP_NOT_RECORDING, oldRecording, recording);
     }
 
     private boolean autoSave = false;
@@ -642,11 +629,11 @@ public final class Mediator {
     // We can provide configuration option for toolbar
     // Toolbar
     private static final String TOOLBAR_SEPARATOR = "-----";
+    private static final String TOOLBAR_TOGGLE_BUTTON = "TOGGLE::";
     private static final String[] TOOLBAR = {
         ACTION_SAVE_SCREENSHOT,
         TOOLBAR_SEPARATOR,
-        ACTION_START_RECORDING,
-        ACTION_STOP_RECORDING,
+        TOOLBAR_TOGGLE_BUTTON + ACTION_RECORDING,
         TOOLBAR_SEPARATOR,
         ACTION_FULL_SCREEN,
         TOOLBAR_SEPARATOR,

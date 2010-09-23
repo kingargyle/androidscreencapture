@@ -24,7 +24,7 @@ final class ImageProcessor {
 
 
     public enum Scale {
-        SMALL(0.5), ORIGINAL(1), LARGE(2), CUSTOM(0);
+        SMALL(0.5), ORIGINAL(1), LARGE(1.5), CUSTOM(0);
 
         private final double factor;
 
