@@ -101,7 +101,7 @@ public class AndroDemon extends Task<Void, Image> implements PreferencesNames {
         BufferedImage image = null;
         if (d != null) {
             try {
-                RawImage screenshot = p.getBoolean("landscape", false) ? device.getScreenshot().getRotated() : device.getScreenshot();
+                RawImage screenshot = mediator.isLandscape() ? device.getScreenshot().getRotated() : device.getScreenshot();
 
                 if (screenshot != null) {
                     image = renderImage(screenshot);
