@@ -5,6 +5,8 @@
 package com.mightypocket.ashoter;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.prefs.Preferences;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -12,7 +14,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.LineBorder;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
@@ -27,16 +33,27 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     private boolean ok;
 
     private JCheckBox showLabelsInToolbarCheckBox;
+    private JCheckBox updateCheckBox;
+    private JCheckBox skipDuplicatesCheckBox;
+    private JCheckBox saveOriginalCheckBox;
+    private JSpinner offsetSpinner;
+    private JPanel fsBackgroundPreview;
+    private JButton okButton;
 
     public OptionsDialog(Mediator mediator) {
         super(mediator.getApplication().getMainFrame(), true);
+        setLocationRelativeTo(mediator.getApplication().getMainFrame());
+        setResizable(false);
+        
         this.mediator = mediator;
 
         initComponents();
         ResourceMap resourceMap = mediator.getApplication().getContext().getResourceMap(OptionsDialog.class);
         resourceMap.injectComponents(this);
+        setTitle(resourceMap.getString("title"));
 
         loadPreferences();
+        getRootPane().setDefaultButton(okButton);
         this.pack();
     }
 
@@ -45,48 +62,17 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         ResourceMap resourceMap = mediator.getApplication().getContext().getResourceMap(OptionsDialog.class);
         getRootPane().setLayout(new BorderLayout());
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.add(new JButton(actionMap.get(ACTION_OK)));
-        buttonsPanel.add(new JButton(actionMap.get(ACTION_CANCEL)));
-
-        JPanel generalPanel = new JPanel();
-        GroupLayout gl1 = new GroupLayout(generalPanel);
-        generalPanel.setLayout(gl1);
-        gl1.setAutoCreateGaps(true);
-        gl1.setAutoCreateContainerGaps(true);
-
-        JLabel sdkPathLabel = new JLabel();
-        sdkPathLabel.setName("sdkPathLabel");
-        JButton setSdkPathButton = new JButton(actionMap.get(ACTION_SET_SDK_PATH));
-        showLabelsInToolbarCheckBox = new JCheckBox();
-        showLabelsInToolbarCheckBox.setName("showLabelsInToolbarCheckBox");
-
-        gl1.setHorizontalGroup(gl1.createParallelGroup()
-            .addGroup(gl1.createSequentialGroup()
-                .addComponent(sdkPathLabel)
-                .addComponent(setSdkPathButton)
-                )
-            .addComponent(showLabelsInToolbarCheckBox)
-            );
-        gl1.setVerticalGroup(gl1.createSequentialGroup()
-            .addGroup(gl1.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(sdkPathLabel)
-                .addComponent(setSdkPathButton)
-                )
-            .addComponent(showLabelsInToolbarCheckBox)
-            );
-        JPanel fullScreenPanel = new JPanel();
-
-        JPanel savePanel = new JPanel();
-
-        JPanel updatePanel = new JPanel();
+        JPanel buttonsPanel = createButtonsPanel(actionMap, resourceMap);
+        JPanel generalPanel = createGeneralPanel(actionMap, resourceMap);
+        JPanel fullScreenPanel = createFullScreenPanel(actionMap, resourceMap);
+        JPanel savePanel = createSavePanel(actionMap, resourceMap);
+        JPanel updatePanel = createUpdatePanel(actionMap, resourceMap);
 
         JTabbedPane pane = new JTabbedPane();
         pane.addTab(resourceMap.getString("tab.general"), generalPanel);
         pane.addTab(resourceMap.getString("tab.fullScreen"), fullScreenPanel);
         pane.addTab(resourceMap.getString("tab.saving"), savePanel);
         pane.addTab(resourceMap.getString("tab.updating"), updatePanel);
-
 
         getRootPane().add(pane, BorderLayout.CENTER);
         getRootPane().add(buttonsPanel, BorderLayout.PAGE_END);
@@ -114,9 +100,145 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
 
     }
 
+    public static final String ACTION_SET_FS_BACKGROUND = "setFsBackground";
+    @Action(name=ACTION_SET_FS_BACKGROUND)
+    public void setFsBackground() {
+
+    }
+
+    public static final String ACTION_SET_DEFAULT_FOLDER = "setDefaultFolder";
+    @Action(name=ACTION_SET_DEFAULT_FOLDER)
+    public void setDefaultFolder() {
+
+    }
+
     private void loadPreferences() {
     }
 
     private void savePreferences() {
+    }
+
+    private JPanel createButtonsPanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
+        JPanel buttonsPanel = new JPanel();
+        okButton = new JButton(actionMap.get(ACTION_OK));
+        buttonsPanel.add(okButton);
+        buttonsPanel.add(new JButton(actionMap.get(ACTION_CANCEL)));
+        return buttonsPanel;
+    }
+
+    private JPanel createGeneralPanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
+        JPanel generalPanel = new JPanel();
+        GroupLayout gl = new GroupLayout(generalPanel);
+        generalPanel.setLayout(gl);
+        gl.setAutoCreateGaps(true);
+        gl.setAutoCreateContainerGaps(true);
+
+        JLabel sdkPathLabel = new JLabel();
+        sdkPathLabel.setName("sdkPathLabel");
+        JButton setSdkPathButton = new JButton(actionMap.get(ACTION_SET_SDK_PATH));
+        showLabelsInToolbarCheckBox = new JCheckBox();
+        showLabelsInToolbarCheckBox.setName("showLabelsInToolbarCheckBox");
+
+        gl.setHorizontalGroup(gl.createParallelGroup()
+            .addGroup(gl.createSequentialGroup()
+                .addComponent(sdkPathLabel)
+                .addComponent(setSdkPathButton)
+                )
+            .addComponent(showLabelsInToolbarCheckBox)
+            );
+        gl.setVerticalGroup(gl.createSequentialGroup()
+            .addGroup(gl.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(sdkPathLabel)
+                .addComponent(setSdkPathButton)
+                )
+            .addComponent(showLabelsInToolbarCheckBox)
+            );
+        return generalPanel;
+    }
+
+    private JPanel createFullScreenPanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
+        JPanel fullScreenPanel = new JPanel();
+        GroupLayout gl = new GroupLayout(fullScreenPanel);
+        fullScreenPanel.setLayout(gl);
+        gl.setAutoCreateGaps(true);
+        gl.setAutoCreateContainerGaps(true);
+        JLabel fsBackgroundLabel = new JLabel();
+        fsBackgroundLabel.setName("fsBackgroundLabel");
+        fsBackgroundPreview = new JPanel();
+        fsBackgroundPreview.setBorder(new LineBorder(Color.GRAY));
+        fsBackgroundPreview.setPreferredSize(new Dimension(20, 10));
+        JButton fsBackgroundButton = new JButton(actionMap.get(ACTION_SET_FS_BACKGROUND));
+        gl.setHorizontalGroup(gl.createSequentialGroup()
+            .addComponent(fsBackgroundLabel)
+            .addComponent(fsBackgroundPreview)
+            .addComponent(fsBackgroundButton)
+            );
+        gl.setVerticalGroup(gl.createBaselineGroup(false, true)
+            .addComponent(fsBackgroundLabel)
+            .addComponent(fsBackgroundPreview)
+            .addComponent(fsBackgroundButton)
+            );
+        return fullScreenPanel;
+    }
+
+    private JPanel createSavePanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
+        JPanel panel = new JPanel();
+        GroupLayout gl = new GroupLayout(panel);
+        panel.setLayout(gl);
+        gl.setAutoCreateContainerGaps(true);
+        gl.setAutoCreateGaps(true);
+
+        JButton browseButton = new JButton(actionMap.get(ACTION_SET_DEFAULT_FOLDER));
+        JLabel folderLabel = new JLabel();
+        folderLabel.setName("folderLabel");
+        skipDuplicatesCheckBox = new JCheckBox();
+        skipDuplicatesCheckBox.setName("skipDuplicatesCheckBox");
+        saveOriginalCheckBox = new JCheckBox();
+        saveOriginalCheckBox.setName("saveOriginalCheckBox");
+        JLabel offsetLabel = new JLabel();
+        offsetLabel.setName("offsetLabel");
+        offsetSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        offsetSpinner.setName("offsetSpinner");
+
+        gl.setHorizontalGroup(gl.createParallelGroup()
+            .addGroup(gl.createSequentialGroup()
+                .addComponent(folderLabel)
+                .addComponent(browseButton)
+                )
+            .addComponent(saveOriginalCheckBox)
+            .addComponent(skipDuplicatesCheckBox)
+            .addGroup(gl.createSequentialGroup()
+                .addComponent(offsetLabel)
+                .addComponent(offsetSpinner)
+                )
+            );
+        gl.setVerticalGroup(gl.createSequentialGroup()
+            .addGroup(gl.createBaselineGroup(false, true)
+                .addComponent(folderLabel)
+                .addComponent(browseButton)
+                )
+            .addComponent(saveOriginalCheckBox)
+            .addComponent(skipDuplicatesCheckBox)
+            .addGroup(gl.createBaselineGroup(false, true)
+                .addComponent(offsetLabel)
+                .addComponent(offsetSpinner)
+                )
+
+            );
+
+        return panel;
+    }
+
+    private JPanel createUpdatePanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
+        JPanel panel = new JPanel();
+        GroupLayout gl = new GroupLayout(panel);
+        gl.setAutoCreateContainerGaps(true);
+        gl.setAutoCreateGaps(true);
+        updateCheckBox = new JCheckBox();
+        updateCheckBox.setName("updateCheckBox");
+        panel.setLayout(gl);
+        gl.setHorizontalGroup(gl.createSequentialGroup().addComponent(updateCheckBox));
+        gl.setVerticalGroup(gl.createBaselineGroup(false, true).addComponent(updateCheckBox));
+        return panel;
     }
 }
