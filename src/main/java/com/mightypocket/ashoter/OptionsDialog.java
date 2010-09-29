@@ -7,18 +7,21 @@ package com.mightypocket.ashoter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
-import javax.swing.SpinnerModel;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
+import org.apache.commons.lang.StringUtils;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
@@ -33,16 +36,20 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     private boolean ok;
 
     private JCheckBox showLabelsInToolbarCheckBox;
+    private JCheckBox showAboutCheckBox;
     private JCheckBox updateCheckBox;
     private JCheckBox skipDuplicatesCheckBox;
     private JCheckBox saveOriginalCheckBox;
     private JSpinner offsetSpinner;
     private JPanel fsBackgroundPreview;
     private JButton okButton;
+    private JTextField sdkPathShowTextField;
+    private JTextField savePathShowTextField;
 
     public OptionsDialog(Mediator mediator) {
         super(mediator.getApplication().getMainFrame(), true);
         setLocationRelativeTo(mediator.getApplication().getMainFrame());
+        setMinimumSize(new Dimension(500, 300));
         setResizable(false);
         
         this.mediator = mediator;
@@ -97,25 +104,61 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     public static final String ACTION_SET_SDK_PATH = "setSdkPath";
     @Action(name=ACTION_SET_SDK_PATH)
     public void setSdkPath() {
-
+        ResourceMap resourceMap = mediator.getApplication().getContext().getResourceMap(OptionsDialog.class);
+        String folder = FolderRequestDialog.requestFolderFor(sdkPathShowTextField.getText(),
+                resourceMap.getString("sdk.request.title"), resourceMap.getString("sdk.request.desc"));
+        if (StringUtils.isNotBlank(folder)) {
+            sdkPathShowTextField.setText(folder);
+        }
     }
 
     public static final String ACTION_SET_FS_BACKGROUND = "setFsBackground";
     @Action(name=ACTION_SET_FS_BACKGROUND)
     public void setFsBackground() {
-
+        ResourceMap resourceMap = mediator.getApplication().getContext().getResourceMap(OptionsDialog.class);
+        Color c = JColorChooser.showDialog(this, resourceMap.getString("color.request.title"), fsBackgroundPreview.getBackground());
+        if (c != null) {
+            fsBackgroundPreview.setBackground(c);
+        }
     }
 
     public static final String ACTION_SET_DEFAULT_FOLDER = "setDefaultFolder";
     @Action(name=ACTION_SET_DEFAULT_FOLDER)
     public void setDefaultFolder() {
-
+        ResourceMap resourceMap = mediator.getApplication().getContext().getResourceMap(OptionsDialog.class);
+        String folder = FolderRequestDialog.requestFolderFor(savePathShowTextField.getText(),
+                resourceMap.getString("save.request.title"), resourceMap.getString("save.request.desc"));
+        if (StringUtils.isNotBlank(folder)) {
+            savePathShowTextField.setText(folder);
+        }
     }
 
     private void loadPreferences() {
+        updateCheckBox.setSelected(p.getBoolean(PREF_CHECK_UPDATES, true));
+        showLabelsInToolbarCheckBox.setSelected(p.getBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, true));
+        saveOriginalCheckBox.setSelected(p.getBoolean(PREF_SAVE_ORIGINAL, true));
+        skipDuplicatesCheckBox.setSelected(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, true));
+        sdkPathShowTextField.setText(p.get(PREF_ANDROID_SDK_PATH, null));
+        savePathShowTextField.setText(p.get(PREF_DEFAULT_FILE_FOLDER, null));
+        //TODO p.get(PREF_DEFAULT_FILE_PREFIX, "screenshot");
+        showAboutCheckBox.setSelected(p.getBoolean(PREF_SHOW_ABOUT, true));
+        fsBackgroundPreview.setBackground(new Color(p.getInt(PREF_GUI_PANEL_BACKGROUND, 0)));
     }
 
     private void savePreferences() {
+        p.putBoolean(PREF_CHECK_UPDATES, updateCheckBox.isSelected());
+        p.putBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, showLabelsInToolbarCheckBox.isSelected());
+        p.putBoolean(PREF_SAVE_ORIGINAL, saveOriginalCheckBox.isSelected());
+        p.putBoolean(PREF_SAVE_SKIP_DUPLICATES, skipDuplicatesCheckBox.isSelected());
+        p.putBoolean(PREF_SHOW_ABOUT, showAboutCheckBox.isSelected());
+        p.put(PREF_ANDROID_SDK_PATH, sdkPathShowTextField.getText());
+        p.put(PREF_DEFAULT_FILE_FOLDER, savePathShowTextField.getText());
+        p.putInt(PREF_GUI_PANEL_BACKGROUND, fsBackgroundPreview.getBackground().getRGB());
+        try {
+            p.flush();
+        } catch (BackingStoreException ex) {
+            
+        }
     }
 
     private JPanel createButtonsPanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
@@ -138,20 +181,28 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         JButton setSdkPathButton = new JButton(actionMap.get(ACTION_SET_SDK_PATH));
         showLabelsInToolbarCheckBox = new JCheckBox();
         showLabelsInToolbarCheckBox.setName("showLabelsInToolbarCheckBox");
+        showAboutCheckBox = new JCheckBox();
+        showAboutCheckBox.setName("showAboutCheckBox");
+        sdkPathShowTextField = new JTextField();
+        sdkPathShowTextField.setEditable(false);
 
         gl.setHorizontalGroup(gl.createParallelGroup()
             .addGroup(gl.createSequentialGroup()
                 .addComponent(sdkPathLabel)
                 .addComponent(setSdkPathButton)
                 )
+            .addComponent(sdkPathShowTextField)
             .addComponent(showLabelsInToolbarCheckBox)
+            .addComponent(showAboutCheckBox)
             );
         gl.setVerticalGroup(gl.createSequentialGroup()
             .addGroup(gl.createParallelGroup(GroupLayout.Alignment.BASELINE)
                 .addComponent(sdkPathLabel)
                 .addComponent(setSdkPathButton)
                 )
+            .addComponent(sdkPathShowTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             .addComponent(showLabelsInToolbarCheckBox)
+            .addComponent(showAboutCheckBox)
             );
         return generalPanel;
     }
@@ -199,12 +250,15 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         offsetLabel.setName("offsetLabel");
         offsetSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
         offsetSpinner.setName("offsetSpinner");
+        savePathShowTextField = new JTextField();
+        savePathShowTextField.setEditable(false);
 
         gl.setHorizontalGroup(gl.createParallelGroup()
             .addGroup(gl.createSequentialGroup()
                 .addComponent(folderLabel)
                 .addComponent(browseButton)
                 )
+            .addComponent(savePathShowTextField)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createSequentialGroup()
@@ -217,6 +271,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
                 .addComponent(folderLabel)
                 .addComponent(browseButton)
                 )
+            .addComponent(savePathShowTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createBaselineGroup(false, true)
@@ -241,4 +296,9 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         gl.setVerticalGroup(gl.createBaselineGroup(false, true).addComponent(updateCheckBox));
         return panel;
     }
+
+    public boolean isOk() {
+        return ok;
+    }
+    
 }
