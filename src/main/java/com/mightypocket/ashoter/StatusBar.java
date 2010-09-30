@@ -12,6 +12,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import org.jdesktop.application.Resource;
 import org.jdesktop.application.ResourceMap;
 
@@ -40,6 +41,7 @@ final class StatusBar extends JPanel {
         connectionStateLabel = new JLabel("");
 
         connectionStateIcon = new JLabel();
+        connectionStateIcon.setVerticalAlignment(SwingConstants.CENTER);
 
         message = new JLabel("");
 

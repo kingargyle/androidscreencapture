@@ -3,6 +3,10 @@
  * and open the template in the editor.
  */
 
+/*
+ * Copyright (C) 2010 mightypocket.com. All rights reserved. Use is
+ * subject to license terms.
+ */
 package com.mightypocket.ashoter;
 
 import com.mightypocket.swing.ImageSelection;
@@ -11,25 +15,42 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.util.prefs.Preferences;
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
+import javax.swing.border.LineBorder;
 
 /**
  *
- * @author etf
+ * @author Illya Yalovyy
  */
-public abstract class AbstractImagePresenter extends JPanel implements ImagePresenter {
+public class DefaultImagePresenter extends JPanel implements ImagePresenter, PreferencesNames {
     protected final JLabel imageLabel = new JLabel();
+    private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
+    private final Mediator mediator;
 
-    public AbstractImagePresenter() {
+    public DefaultImagePresenter(Mediator mediator) {
         imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         imageLabel.setOpaque(true);
-        imageLabel.setBackground(Color.BLACK);
-        imageLabel.setForeground(Color.red);
+        imageLabel.setBackground(new Color(p.getInt(PREF_GUI_PANEL_BACKGROUND, 0)));
         imageLabel.setTransferHandler(new ImageSelection());
+        this.mediator = mediator;
+
+        GroupLayout gl = new GroupLayout(this);
+        setLayout(gl);
+
+        gl.setHorizontalGroup(
+            gl.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+        );
+        gl.setVerticalGroup(
+            gl.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(imageLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+        );
     }
 
     @Override

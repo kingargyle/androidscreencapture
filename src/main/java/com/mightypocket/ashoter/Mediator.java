@@ -5,13 +5,9 @@
 package com.mightypocket.ashoter;
 
 import javax.swing.AbstractButton;
-import java.awt.image.RenderedImage;
-import java.io.IOException;
-import java.util.logging.Level;
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import java.io.File;
 import com.mightypocket.swing.BusyAndroidAnimation;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
@@ -22,7 +18,6 @@ import java.util.List;
 import org.jdesktop.application.Action;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.text.MessageFormat;
 import java.util.prefs.Preferences;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -50,7 +45,7 @@ import static com.mightypocket.utils.SwingHelper.*;
  *
  * @author Illya Yalovyy
  */
-public final class Mediator {
+public final class Mediator implements PreferencesNames {
     private final Logger logger = LoggerFactory.getLogger(Mediator.class);
     private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
 
@@ -60,6 +55,8 @@ public final class Mediator {
     private final ButtonGroup devicesGroup = new ButtonGroup();
     private BusyAndroidAnimation busyAndroidAnimation;
     private final ImageSaver imageSaver;
+    private final FullScreenFrame fullScreenFrame;
+    private ImagePresenter presenter;
 
     // Constants
 
@@ -89,8 +86,11 @@ public final class Mediator {
 
         statusBar = new StatusBar(this);
         mainPanel = new MainPanel(this);
+        presenter = mainPanel.getPresenter();
 
         imageSaver  = new ImageSaver(this);
+
+        fullScreenFrame = new FullScreenFrame(this);
 
         demon = new AndroDemon(this);
         installListeners();
@@ -105,9 +105,7 @@ public final class Mediator {
 
     private void initProperties() {
         //TODO Read from preferences
-
-//        setLandscape(false);
-//        setAutoRefresh(true);
+        setLandscape(p.getBoolean(PREF_SCREENSHOT_LANDSCAPE, false));
     }
 
     private void installListeners() {
@@ -121,15 +119,11 @@ public final class Mediator {
                     final ImageProcessor ip = getImageProcessor();
                     
                     if (isScaleFit())
-                        ip.setCustomBounds(mainPanel.getPresenterDimension());
+                        ip.setCustomBounds(mainPanel.getPresenter().getPresenterDimension());
 
                     final Image imgp = ip.process(img);
 
-                    if (fullScreen) {
-                        showOnFullScreen(imgp);
-                    } else if (autoRefresh) {
-                        showOnMainPanel(imgp);
-                    }
+                    showImage(imgp);
 
                     if (isRecording()) {
                         imageSaver.saveImage((saveOriginal)?img:imgp);
@@ -137,15 +131,9 @@ public final class Mediator {
 
                     lastImage = img;
                 } else {
-                    if (fullScreen) {
-                        showOnFullScreen(generateProgresImage());
-                    } else if (autoRefresh) {
-                        showOnMainPanel(generateProgresImage());
-                    }
+                    showImage(generateProgresImage());
                 }
-
             }
-
         });
 
         addPropertyChangeListener(PROP_CONNECTED_DEVICE, new PropertyChangeListener() {
@@ -165,6 +153,16 @@ public final class Mediator {
                     devicesGroup.clearSelection();
                 }
 
+            }
+        });
+
+        addPropertyChangeListener(PROP_FULL_SCREEN, new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                logger.debug("Full screen: {}", evt.getNewValue());
+                boolean fs = (Boolean)evt.getNewValue();
+                presenter = fs ? fullScreenFrame.getPresenter() : mainPanel.getPresenter();
             }
         });
     }
@@ -195,7 +193,6 @@ public final class Mediator {
 
         // Menu View
         JMenu menuView = new JMenu(resourceMap.getString("menu.view"));
-        menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_AUTO_REFRESH)));
         menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_LANDSCAPE)));
         menuView.addSeparator();
         ButtonGroup scaleGroup = new ButtonGroup();
@@ -314,14 +311,6 @@ public final class Mediator {
         demon.cancel(true);
     }
 
-    private void showOnFullScreen(Image img) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private void showOnMainPanel(Image img) {
-        mainPanel.setImage(img);
-    }
-
     void addDevice(final String deviceStr) {
         if (!devices.containsKey(deviceStr)) {
             try {
@@ -396,30 +385,30 @@ public final class Mediator {
     public static final String ACTION_RECORDING = "recording";
     @Action(name=ACTION_RECORDING, enabledProperty=PROP_CONNECTED, selectedProperty=PROP_RECORDING)
     public void recording() {
+
     }
 
     public static final String ACTION_OPEN_DESTINATION_FOLDER = "openDestinationFolder";
     @Action(name=ACTION_OPEN_DESTINATION_FOLDER)
     public void openDestinationFolder() {
-
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().open(new File(p.get(PREF_DEFAULT_FILE_FOLDER, "")));
+            } catch (Exception ignore) {
+            }
+        }
     }
 
     public static final String ACTION_COPY_TO_CLIPBOARD = "copyToClipboard";
     @Action(name=ACTION_COPY_TO_CLIPBOARD, enabledProperty=PROP_CONNECTED)
     public void copyToClipboard() {
-        mainPanel.copy();
+        mainPanel.getPresenter().copy();
     }
 
     public static final String ACTION_OPTIONS = "options";
     @Action(name=ACTION_OPTIONS)
     public void options() {
         OptionsDialog.showDialog(this);
-    }
-
-    public static final String ACTION_AUTO_REFRESH = "autoRefresh";
-    @Action(name=ACTION_AUTO_REFRESH, selectedProperty=PROP_AUTO_REFRESH)
-    public void autoRefresh() {
-        
     }
 
     public static final String ACTION_LANDSCAPE = "landscape";
@@ -431,7 +420,7 @@ public final class Mediator {
     public static final String ACTION_FULL_SCREEN = "fullScreen";
     @Action(name=ACTION_FULL_SCREEN, enabledProperty=PROP_CONNECTED)
     public void fullScreen() {
-
+        fullScreenFrame.showFullScreen();
     }
 
     public static final String ACTION_SIZE_ORIGINAL = "sizeOriginal";
@@ -552,18 +541,6 @@ public final class Mediator {
         return !devices.isEmpty();
     }
 
-    private boolean autoRefresh = true;
-    public static final String PROP_AUTO_REFRESH = "autoRefresh";
-    public boolean isAutoRefresh() {
-        return autoRefresh;
-    }
-
-    public void setAutoRefresh(boolean autoRefresh) {
-        boolean oldValue = this.autoRefresh;
-        this.autoRefresh = autoRefresh;
-        pcs.firePropertyChange(PROP_AUTO_REFRESH, oldValue, autoRefresh);
-    }
-
     private boolean landscape = false;
     public static final String PROP_LANDSCAPE = "landscape";
     public boolean isLandscape() {
@@ -622,6 +599,11 @@ public final class Mediator {
         boolean oldScaleFit = this.scaleFit;
         this.scaleFit = scaleFit;
         pcs.firePropertyChange(PROP_SCALE_FIT, oldScaleFit, scaleFit);
+    }
+
+    private void showImage(Image img) {
+        if (presenter != null)
+            presenter.setImage(img);
     }
 
     // We can provide configuration option for toolbar

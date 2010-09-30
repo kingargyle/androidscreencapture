@@ -48,7 +48,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
 
     public OptionsDialog(Mediator mediator) {
         super(mediator.getApplication().getMainFrame(), true);
-        setLocationRelativeTo(mediator.getApplication().getMainFrame());
+        
         setMinimumSize(new Dimension(500, 300));
         setResizable(false);
         
@@ -303,6 +303,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
 
     public static void showDialog(Mediator mediator) {
         OptionsDialog d = new OptionsDialog(mediator);
+        d.setLocationRelativeTo(mediator.getApplication().getMainFrame());
         d.setVisible(true);
         d.dispose();
     }

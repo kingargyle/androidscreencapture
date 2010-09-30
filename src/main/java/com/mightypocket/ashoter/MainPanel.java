@@ -7,6 +7,7 @@ package com.mightypocket.ashoter;
 
 import com.mightypocket.utils.ResourceHelper;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Desktop;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
@@ -18,9 +19,10 @@ import javax.swing.event.HyperlinkListener;
  *
  * @author etf
  */
-final class MainPanel extends AbstractImagePresenter {
+final class MainPanel extends JPanel {
     private CardLayout layout = new CardLayout();
     private final Mediator mediator;
+    private ImagePresenter presenter;
 
     MainPanel(Mediator mediator) {
         this.mediator = mediator;
@@ -54,21 +56,10 @@ final class MainPanel extends AbstractImagePresenter {
             }
         });
 
-        JPanel presenter = new JPanel();
-        GroupLayout gl = new GroupLayout(presenter);
-        presenter.setLayout(gl);
-
-        gl.setHorizontalGroup(
-            gl.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-        );
-        gl.setVerticalGroup(
-            gl.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imageLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-        );
+        presenter = new DefaultImagePresenter(mediator);
 
         add(intro,"intro");
-        add(presenter,"main");
+        add((Component) presenter,"main");
         layout.first(this);
         
     }
@@ -79,6 +70,10 @@ final class MainPanel extends AbstractImagePresenter {
 
     public void showMain() {
         layout.last(this);
+    }
+
+    public ImagePresenter getPresenter() {
+        return presenter;
     }
 
 }
