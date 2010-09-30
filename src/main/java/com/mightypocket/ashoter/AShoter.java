@@ -50,6 +50,8 @@ public final class AShoter extends SingleFrameApplication implements Preferences
         }
 
         mediator.startDemon();
+
+        getContext().getTaskService().execute(new UpdateChecker(mediator));
     }
 
     @Override
@@ -72,5 +74,13 @@ public final class AShoter extends SingleFrameApplication implements Preferences
         String errorTitle = resourceMap.getString("error.title");
 
         JOptionPane.showMessageDialog(getMainFrame(), message, errorTitle, JOptionPane.ERROR_MESSAGE);
+    }
+
+    void showMessage(String messageKey, Object... args) {
+        ResourceMap resourceMap = getContext().getResourceMap();
+        String message = resourceMap.getString(messageKey, args);
+        String errorTitle = resourceMap.getString("info.title");
+
+        JOptionPane.showMessageDialog(getMainFrame(), message, errorTitle, JOptionPane.INFORMATION_MESSAGE);
     }
 }

@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * Copyright (C) 2010 mightypocket.com. All rights reserved. Use is
  * subject to license terms.
  */
@@ -22,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
-import javax.swing.border.LineBorder;
 
 /**
  *

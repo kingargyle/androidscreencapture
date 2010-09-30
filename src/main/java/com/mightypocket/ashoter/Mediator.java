@@ -4,6 +4,7 @@
  */
 package com.mightypocket.ashoter;
 
+import org.jdesktop.application.Task;
 import javax.swing.AbstractButton;
 import java.io.File;
 import com.mightypocket.swing.BusyAndroidAnimation;
@@ -222,6 +223,7 @@ public final class Mediator implements PreferencesNames {
         ApplicationActionMap actionMap = getActionMap();
         JToolBar bar = new JToolBar();
         bar.setRollover(true);
+        final boolean hideText = !p.getBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, true);
         for (String actionName : TOOLBAR) {
             if (TOOLBAR_SEPARATOR.equals(actionName)) {
                 bar.addSeparator();
@@ -235,6 +237,7 @@ public final class Mediator implements PreferencesNames {
                 bt.setFocusable(false);
                 bt.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 bt.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                bt.setHideActionText(hideText);
                 bar.add(bt);
             }
         }
@@ -448,9 +451,9 @@ public final class Mediator implements PreferencesNames {
     }
 
     public static final String ACTION_CHECK_UPDATES = "checkUpdates";
-    @Action(name=ACTION_CHECK_UPDATES)
-    public void checkUpdates() {
-
+    @Action(name=ACTION_CHECK_UPDATES, block=Task.BlockingScope.ACTION)
+    public Task checkUpdates() {
+        return new UpdateChecker(this);
     }
 
     public static final String ACTION_ABOUT = "about";

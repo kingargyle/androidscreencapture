@@ -9,7 +9,7 @@ import com.mightypocket.utils.ResourceHelper;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Desktop;
-import javax.swing.GroupLayout;
+import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
@@ -60,7 +60,11 @@ final class MainPanel extends JPanel {
 
         add(intro,"intro");
         add((Component) presenter,"main");
-        layout.first(this);
+        if(Preferences.userNodeForPackage(AShoter.class).getBoolean(PreferencesNames.PREF_SHOW_ABOUT, true)) {
+            layout.first(this);
+        }  else {
+            mediator.showMain();
+        }
         
     }
 
