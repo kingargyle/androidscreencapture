@@ -5,13 +5,17 @@
 
 package com.mightypocket.ashoter;
 
+import com.mightypocket.swing.ImageSelection;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.TransferHandler;
 
 /**
  *
@@ -25,6 +29,7 @@ public abstract class AbstractImagePresenter extends JPanel implements ImagePres
         imageLabel.setOpaque(true);
         imageLabel.setBackground(Color.BLACK);
         imageLabel.setForeground(Color.red);
+        imageLabel.setTransferHandler(new ImageSelection());
     }
 
     @Override
@@ -36,4 +41,14 @@ public abstract class AbstractImagePresenter extends JPanel implements ImagePres
     public Dimension getPresenterDimension() {
         return imageLabel.getParent().getSize();
     }
+
+    @Override
+    public void copy() {
+        TransferHandler handler = imageLabel.getTransferHandler();
+        Clipboard systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        handler.exportToClipboard(imageLabel, systemClipboard,
+            TransferHandler.COPY);
+    }
+
 }

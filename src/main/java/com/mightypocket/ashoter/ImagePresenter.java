@@ -15,4 +15,5 @@ import java.awt.Image;
 public interface ImagePresenter {
     void setImage(Image img);
     Dimension getPresenterDimension();
+    void copy();
 }

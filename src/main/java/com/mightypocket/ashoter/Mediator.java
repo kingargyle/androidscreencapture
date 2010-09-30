@@ -405,17 +405,15 @@ public final class Mediator {
     }
 
     public static final String ACTION_COPY_TO_CLIPBOARD = "copyToClipboard";
-    @Action(name=ACTION_COPY_TO_CLIPBOARD)
+    @Action(name=ACTION_COPY_TO_CLIPBOARD, enabledProperty=PROP_CONNECTED)
     public void copyToClipboard() {
-
+        mainPanel.copy();
     }
 
     public static final String ACTION_OPTIONS = "options";
     @Action(name=ACTION_OPTIONS)
     public void options() {
-        OptionsDialog d = new OptionsDialog(this);
-        d.setVisible(true);
-        d.dispose();
+        OptionsDialog.showDialog(this);
     }
 
     public static final String ACTION_AUTO_REFRESH = "autoRefresh";

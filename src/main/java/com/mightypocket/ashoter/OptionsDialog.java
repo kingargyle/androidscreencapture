@@ -263,7 +263,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createSequentialGroup()
                 .addComponent(offsetLabel)
-                .addComponent(offsetSpinner)
+                .addComponent(offsetSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 )
             );
         gl.setVerticalGroup(gl.createSequentialGroup()
@@ -300,5 +300,10 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     public boolean isOk() {
         return ok;
     }
-    
+
+    public static void showDialog(Mediator mediator) {
+        OptionsDialog d = new OptionsDialog(mediator);
+        d.setVisible(true);
+        d.dispose();
+    }
 }
