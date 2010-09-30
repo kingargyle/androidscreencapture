@@ -138,6 +138,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         showLabelsInToolbarCheckBox.setSelected(p.getBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, true));
         saveOriginalCheckBox.setSelected(p.getBoolean(PREF_SAVE_ORIGINAL, true));
         skipDuplicatesCheckBox.setSelected(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, true));
+        offsetSpinner.setValue(p.getInt(PREF_SAVE_SKIP_OFFSET, 40));
         sdkPathShowTextField.setText(p.get(PREF_ANDROID_SDK_PATH, null));
         savePathShowTextField.setText(p.get(PREF_DEFAULT_FILE_FOLDER, null));
         //TODO p.get(PREF_DEFAULT_FILE_PREFIX, "screenshot");
@@ -151,6 +152,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         p.putBoolean(PREF_SAVE_ORIGINAL, saveOriginalCheckBox.isSelected());
         p.putBoolean(PREF_SAVE_SKIP_DUPLICATES, skipDuplicatesCheckBox.isSelected());
         p.putBoolean(PREF_SHOW_ABOUT, showAboutCheckBox.isSelected());
+        p.putInt(PREF_SAVE_SKIP_OFFSET, (Integer)offsetSpinner.getValue());
         p.put(PREF_ANDROID_SDK_PATH, sdkPathShowTextField.getText());
         p.put(PREF_DEFAULT_FILE_FOLDER, savePathShowTextField.getText());
         p.putInt(PREF_GUI_PANEL_BACKGROUND, fsBackgroundPreview.getBackground().getRGB());

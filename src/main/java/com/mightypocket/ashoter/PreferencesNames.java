@@ -18,6 +18,7 @@ public interface PreferencesNames {
     String PREF_FILE_COUNTER = "file-counter";
     String PREF_SAVE_ORIGINAL = "save-original";
     String PREF_SAVE_SKIP_DUPLICATES = "save-skip-duplicates";
+    String PREF_SAVE_SKIP_OFFSET = "save-skip-duplicates";
 
     String PREF_SCREENSHOT_LANDSCAPE = "screenshot-landscape";
     String PREF_SCREENSHOT_SCALE = "screenshot-scale";
