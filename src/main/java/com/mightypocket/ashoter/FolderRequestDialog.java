@@ -76,8 +76,8 @@ public final class FolderRequestDialog extends JDialog {
             )
             .addComponent(separator, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
             .addGroup(GroupLayout.Alignment.TRAILING, gl.createSequentialGroup()
-                .addComponent(buttonCancel)
                 .addComponent(buttonOk)
+                .addComponent(buttonCancel)
             )
         );
 

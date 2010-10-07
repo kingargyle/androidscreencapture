@@ -73,7 +73,7 @@ public final class Mediator implements PreferencesNames {
     private final AndroDemon demon;
 
     // State
-    private Image lastImage;
+    private ImageEx lastImage;
 
     
 
@@ -110,24 +110,26 @@ public final class Mediator implements PreferencesNames {
     }
 
     private void installListeners() {
-        demon.addTaskListener(new Adapter<Void, Image>() {
+        demon.addTaskListener(new Adapter<Void, ImageEx>() {
             @Override
-            public void process(TaskEvent<List<Image>> event) {
-                List<Image> value = event.getValue();
+            public void process(TaskEvent<List<ImageEx>> event) {
+                List<ImageEx> value = event.getValue();
 
                 if (!value.isEmpty()) {
-                    final Image img = value.get(0);
+                    final ImageEx img = value.get(0);
                     final ImageProcessor ip = getImageProcessor();
                     
                     if (isScaleFit())
                         ip.setCustomBounds(mainPanel.getPresenter().getPresenterDimension());
 
-                    final Image imgp = ip.process(img);
+                    final Image imgp = ip.process(img.getValue());
 
                     showImage(imgp);
 
-                    if (isRecording()) {
-                        imageSaver.saveImage((saveOriginal)?img:imgp);
+                    logger.debug("skip: {}",p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, false));
+
+                    if (isRecording() && !(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, false) && img.isDuplicate())) {
+                        imageSaver.saveImage((saveOriginal)?img.getValue():imgp);
                     }
 
                     lastImage = img;
@@ -273,7 +275,7 @@ public final class Mediator implements PreferencesNames {
         return toolBar;
     }
 
-    public Image getLastImage() {
+    public ImageEx getLastImage() {
         return lastImage;
     }
 
@@ -382,7 +384,7 @@ public final class Mediator implements PreferencesNames {
     public static final String ACTION_SAVE_SCREENSHOT = "saveScreenshot";
     @Action(name=ACTION_SAVE_SCREENSHOT, enabledProperty=PROP_CONNECTED)
     public void saveScreenshot() {
-        imageSaver.saveImage(lastImage);
+        imageSaver.saveImage(lastImage.getValue());
     }
 
     public static final String ACTION_RECORDING = "recording";

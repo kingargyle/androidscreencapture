@@ -49,7 +49,7 @@ final class ImageSaver implements PreferencesNames {
     private File getNextAutoFile() {
         int cnt = p.getInt(PREF_FILE_COUNTER, 0) + 1;
         String path = p.get(PREF_DEFAULT_FILE_FOLDER, "");
-        String prefix = p.get(PREF_DEFAULT_FILE_FOLDER, "screenshot");
+        String prefix = p.get(PREF_DEFAULT_FILE_PREFIX, "screenshot");
         String fileName = String.format("%s_%05d.png", prefix, cnt);
         p.putInt(PREF_FILE_COUNTER, cnt);
         File file = new File(path, fileName);

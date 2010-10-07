@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Illya Yalovyy
  */
-public class AndroDemon extends Task<Void, Image> implements PreferencesNames {
+public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames {
     public static final int CONNECTING_PAUSE = 200;
 
     private final Logger logger = LoggerFactory.getLogger(AndroDemon.class);
@@ -35,6 +35,7 @@ public class AndroDemon extends Task<Void, Image> implements PreferencesNames {
     private AndroidDebugBridge bridge;
     private IDevice device;
     private boolean active = true;
+    private int[] lastRawImage;
     
     private final GraphicsConfiguration gc;
 
@@ -65,7 +66,7 @@ public class AndroDemon extends Task<Void, Image> implements PreferencesNames {
                 break;
             }
             
-            Image img = null;
+            ImageEx img = null;
             if (active) {
                 if (device != null) {
                         img = fetchScreen();
@@ -96,9 +97,9 @@ public class AndroDemon extends Task<Void, Image> implements PreferencesNames {
         logger.trace("finished");
     }
 
-    private Image fetchScreen() {
+    private ImageEx fetchScreen() {
         IDevice d = device;
-        BufferedImage image = null;
+        ImageEx image = null;
         if (d != null) {
             try {
                 RawImage screenshot = mediator.isLandscape() ? device.getScreenshot().getRotated() : device.getScreenshot();
@@ -153,19 +154,42 @@ public class AndroDemon extends Task<Void, Image> implements PreferencesNames {
         }
     }
 
-    private BufferedImage renderImage(RawImage screenshot) {
+    private ImageEx renderImage(RawImage screenshot) {
         BufferedImage image = gc.createCompatibleImage(screenshot.width, screenshot.height);
+
+        int offset = p.getInt(PREF_SAVE_SKIP_OFFSET, 0);
+        int size = screenshot.width * screenshot.height;
+
+        if (lastRawImage == null || lastRawImage.length != size) {
+            lastRawImage = new int[size];
+        }
 
         int index = 0;
         int indexInc = screenshot.bpp >> 3;
 
+        boolean duplicate = true;
+
+        int value, pos;
         for (int y = 0; y < screenshot.height; y++) {
             for (int x = 0; x < screenshot.width; x++, index += indexInc) {
-                int value = screenshot.getARGB(index);
+                value = screenshot.getARGB(index);
                 image.setRGB(x, y, value);
+                pos = x + y * screenshot.width;
+
+                if (duplicate && y >= offset)
+                    duplicate = duplicate && (lastRawImage[pos] == value);
+
+                lastRawImage[pos] = value;
             }
         }
-        return image;
+
+        logger.debug("duplicate: {}, offset: {}",duplicate, offset);
+
+        ImageEx res = new ImageEx(image);
+        res.setDuplicate(duplicate);
+        res.setLandscape(mediator.isLandscape());
+
+        return res;
     }
 
     public boolean isActive() {
