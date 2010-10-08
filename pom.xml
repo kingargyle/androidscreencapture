@@ -5,7 +5,7 @@
     <groupId>com.mightypocket</groupId>
     <artifactId>AShoter</artifactId>
     <packaging>jar</packaging>
-    <version>0.9.00-SNAPSHOT</version>
+    <version>0.9.01-SNAPSHOT</version>
     <name>AShoter</name>
     <url>http://maven.apache.org</url>
     <build>

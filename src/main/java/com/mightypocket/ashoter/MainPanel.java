@@ -9,17 +9,33 @@ import com.mightypocket.utils.ResourceHelper;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.ImageView;
+import org.apache.commons.lang.StringUtils;
+import org.jdesktop.application.ResourceMap;
 
 /**
  *
  * @author etf
  */
 final class MainPanel extends JPanel {
+    static final String IMAGE_CACHE_PROPERTY = "imageCache";
+
     private CardLayout layout = new CardLayout();
     private final Mediator mediator;
     private ImagePresenter presenter;
@@ -33,9 +49,11 @@ final class MainPanel extends JPanel {
     private void initComponents() {
         setLayout(layout);
 
-        JTextPane intro = new JTextPane();
+        final JTextPane intro = new JTextPane();
+
         intro.setContentType("text/html");
-        intro.setText(ResourceHelper.loadString("intro.html"));//
+        final ResourceMap resourceMap = mediator.getApplication().getContext().getResourceMap();
+        intro.setText(ResourceHelper.loadString("about.html", resourceMap));
         intro.setEditable(false);
         intro.addHyperlinkListener(new HyperlinkListener() {
 
@@ -43,7 +61,7 @@ final class MainPanel extends JPanel {
             public void hyperlinkUpdate(HyperlinkEvent e) {
                 if (!HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType()))
                     return;
-                if ("action:connect".equals(e.getDescription())) {
+                if ("action:close".equals(e.getDescription())) {
                     mediator.showMain();
                 } else {
                     if (Desktop.isDesktopSupported()) {
@@ -56,11 +74,12 @@ final class MainPanel extends JPanel {
             }
         });
 
+        ((HTMLDocument)intro.getDocument()).setBase(AShoter.class.getResource("resources/about.html"));
         presenter = new DefaultImagePresenter(mediator);
 
         add(intro,"intro");
         add((Component) presenter,"main");
-        if(Preferences.userNodeForPackage(AShoter.class).getBoolean(PreferencesNames.PREF_SHOW_ABOUT, true)) {
+        if(Preferences.userNodeForPackage(AShoter.class).getBoolean(PreferencesNames.PREF_SHOW_ABOUT, false)) {
             layout.first(this);
         }  else {
             mediator.showMain();

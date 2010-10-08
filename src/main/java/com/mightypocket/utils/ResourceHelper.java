@@ -6,7 +6,9 @@ package com.mightypocket.utils;
 
 import com.mightypocket.ashoter.AShoter;
 import java.io.InputStream;
+import java.util.Set;
 import org.apache.commons.io.IOUtils;
+import org.jdesktop.application.ResourceMap;
 
 /**
  *
@@ -17,13 +19,21 @@ public final class ResourceHelper {
     private ResourceHelper() {
     }
 
-    public static String loadString(String name) {
+    public static String loadString(String name, ResourceMap resourceMap) {
         String result = null;
 
         InputStream is = null;
         try {
-            is = AShoter.class.getResourceAsStream("resources/intro.html");
+            is = AShoter.class.getResourceAsStream("resources/"+name);
             result = IOUtils.toString(is);
+            Set<String> keySet = resourceMap.keySet();
+            for (String key : keySet) {
+                String token = "${" +key + "}";
+                if (result.contains(token)) {
+                    String value = resourceMap.getString(key);
+                    result = result.replace(token, value);
+                }
+            }
         } catch (Exception e) {
             //should neve be a case
             e.printStackTrace();
