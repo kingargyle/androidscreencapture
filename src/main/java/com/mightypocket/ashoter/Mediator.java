@@ -126,8 +126,6 @@ public final class Mediator implements PreferencesNames {
 
                     showImage(imgp);
 
-                    logger.debug("skip: {}",p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, false));
-
                     if (isRecording() && !(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, false) && img.isDuplicate())) {
                         imageSaver.saveImage((saveOriginal)?img.getValue():imgp);
                     }

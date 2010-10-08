@@ -183,8 +183,6 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
             }
         }
 
-        logger.debug("duplicate: {}, offset: {}",duplicate, offset);
-
         ImageEx res = new ImageEx(image);
         res.setDuplicate(duplicate);
         res.setLandscape(mediator.isLandscape());
