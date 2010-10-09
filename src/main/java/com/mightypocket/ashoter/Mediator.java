@@ -54,7 +54,6 @@ public final class Mediator implements PreferencesNames {
     private JMenu menuFileDevices;
     private final Map<String, JRadioButtonMenuItem> devices = new HashMap<String, JRadioButtonMenuItem>();
     private final ButtonGroup devicesGroup = new ButtonGroup();
-    private BusyAndroidAnimation busyAndroidAnimation;
     private final ImageSaver imageSaver;
     private final FullScreenFrame fullScreenFrame;
     private ImagePresenter presenter;
@@ -107,6 +106,7 @@ public final class Mediator implements PreferencesNames {
     private void initProperties() {
         //TODO Read from preferences
         setLandscape(p.getBoolean(PREF_SCREENSHOT_LANDSCAPE, false));
+        
     }
 
     private void installListeners() {
@@ -132,7 +132,7 @@ public final class Mediator implements PreferencesNames {
 
                     lastImage = img;
                 } else {
-                    showImage(generateProgresImage());
+                    showImage(generateDummyImage());
                 }
             }
         });
@@ -370,11 +370,8 @@ public final class Mediator implements PreferencesNames {
         });
     }
 
-    private Image generateProgresImage() {
-        if (busyAndroidAnimation == null) {
-            busyAndroidAnimation = new BusyAndroidAnimation();
-        }
-        return busyAndroidAnimation.getNextImage();
+    private Image generateDummyImage() {
+        return application.getContext().getResourceMap().getImageIcon("dummyImage").getImage();
     }
 
     // Actions:
