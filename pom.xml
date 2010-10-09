@@ -91,6 +91,7 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>ashot</finalName>
     </build>
     <dependencies>
         <dependency>

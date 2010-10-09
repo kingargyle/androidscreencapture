@@ -9,24 +9,13 @@ import com.mightypocket.utils.ResourceHelper;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.ImageView;
-import org.apache.commons.lang.StringUtils;
 import org.jdesktop.application.ResourceMap;
 
 /**
@@ -76,9 +65,10 @@ final class MainPanel extends JPanel {
 
         ((HTMLDocument)intro.getDocument()).setBase(AShoter.class.getResource("resources/about.html"));
         presenter = new DefaultImagePresenter(mediator);
+        JScrollPane scrollPane = new JScrollPane((Component) presenter);
 
-        add(intro,"intro");
-        add((Component) presenter,"main");
+        add(intro, "intro");
+        add(scrollPane, "main");
         if(Preferences.userNodeForPackage(AShoter.class).getBoolean(PreferencesNames.PREF_SHOW_ABOUT, false)) {
             layout.first(this);
         }  else {
