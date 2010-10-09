@@ -4,10 +4,10 @@
  */
 package com.mightypocket.ashoter;
 
+import java.awt.Dimension;
 import org.jdesktop.application.Task;
 import javax.swing.AbstractButton;
 import java.io.File;
-import com.mightypocket.swing.BusyAndroidAnimation;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -50,7 +50,7 @@ public final class Mediator implements PreferencesNames {
     private final Logger logger = LoggerFactory.getLogger(Mediator.class);
     private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
 
-    private ImageProcessor imageProcessor;
+    private ImageProcessor imageProcessor = new ImageProcessor();;
     private JMenu menuFileDevices;
     private final Map<String, JRadioButtonMenuItem> devices = new HashMap<String, JRadioButtonMenuItem>();
     private final ButtonGroup devicesGroup = new ButtonGroup();
@@ -73,8 +73,6 @@ public final class Mediator implements PreferencesNames {
 
     // State
     private ImageEx lastImage;
-
-    
 
     public Mediator( final AShoter application) {
         this.application = application;
@@ -106,7 +104,21 @@ public final class Mediator implements PreferencesNames {
     private void initProperties() {
         //TODO Read from preferences
         setLandscape(p.getBoolean(PREF_SCREENSHOT_LANDSCAPE, false));
-        
+
+        String scale = p.get(PREF_SCREENSHOT_SCALE, PROP_SCALE_FIT);
+
+        if (PROP_SCALE_FIT.equals(scale)) {
+            setScaleFit(true);
+        } else if (PROP_SCALE_LARGE.equals(scale)) {
+            setScaleLarge(true);
+        } else if (PROP_SCALE_ORIGINAL.equals(scale)) {
+            setScaleOriginal(true);
+        } else if (PROP_SCALE_SMALL.equals(scale)) {
+            setScaleSmall(true);
+        } else {
+            double scale_custom = p.getDouble(PREF_SCREENSHOT_SCALE_CUSTOM, 1.0);
+            getImageProcessor().setScale(scale_custom);
+        }
     }
 
     private void installListeners() {
@@ -117,12 +129,9 @@ public final class Mediator implements PreferencesNames {
 
                 if (!value.isEmpty()) {
                     final ImageEx img = value.get(0);
-                    final ImageProcessor ip = getImageProcessor();
-                    
-                    if (isScaleFit())
-                        ip.setCustomBounds(mainPanel.getPresenter().getPresenterDimension());
+                    updateImageProcessor(img);
 
-                    final Image imgp = ip.process(img.getValue());
+                    final Image imgp = imageProcessor.process(img.getValue());
 
                     showImage(imgp);
 
@@ -135,6 +144,7 @@ public final class Mediator implements PreferencesNames {
                     showImage(generateDummyImage());
                 }
             }
+
         });
 
         addPropertyChangeListener(PROP_CONNECTED_DEVICE, new PropertyChangeListener() {
@@ -166,6 +176,23 @@ public final class Mediator implements PreferencesNames {
                 presenter = fs ? fullScreenFrame.getPresenter() : mainPanel.getPresenter();
             }
         });
+
+    }
+
+    private void updateImageProcessor(final ImageEx img) {
+        if (isScaleFit()) {
+            Dimension customBounds = mainPanel.getPresenter().getPresenterDimension();
+            double scale = Math.min(customBounds.getWidth() / img.getValue().getWidth(null), customBounds.getHeight() / img.getValue().getHeight(null));
+            imageProcessor.setScale(scale);
+        }
+        
+        if (isLandscape() != img.isLandscape()) {
+            if (isLandscape()) {
+                imageProcessor.setRotation(isLandscape() ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
+            }
+        } else {
+            imageProcessor.setRotation(ImageProcessor.Rotation.R0);
+        }
     }
     
     private JMenuBar createMenuBar() {
@@ -247,9 +274,6 @@ public final class Mediator implements PreferencesNames {
     }
 
     private ImageProcessor getImageProcessor() {
-        if (imageProcessor == null) {
-            imageProcessor = new ImageProcessor();
-        }
         return imageProcessor;
     }
 
@@ -426,25 +450,32 @@ public final class Mediator implements PreferencesNames {
     public static final String ACTION_SIZE_ORIGINAL = "sizeOriginal";
     @Action(name=ACTION_SIZE_ORIGINAL, selectedProperty=PROP_SCALE_ORIGINAL)
     public void sizeOriginal() {
-        getImageProcessor().setScale(ImageProcessor.Scale.ORIGINAL);
+        getImageProcessor().setScale(1.0);
+        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_ORIGINAL);
+        updateLastImage();
     }
 
     public static final String ACTION_SIZE_LARGE = "sizeLarge";
     @Action(name=ACTION_SIZE_LARGE, selectedProperty=PROP_SCALE_LARGE)
     public void sizeLarge() {
-        getImageProcessor().setScale(ImageProcessor.Scale.LARGE);
+        getImageProcessor().setScale(1.5);
+        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_LARGE);
+        updateLastImage();
     }
 
     public static final String ACTION_SIZE_SMALL = "sizeSmall";
     @Action(name=ACTION_SIZE_SMALL, selectedProperty=PROP_SCALE_SMALL)
     public void sizeSmall() {
-        getImageProcessor().setScale(ImageProcessor.Scale.SMALL);
+        getImageProcessor().setScale(0.5);
+        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_SMALL);
+        updateLastImage();
     }
 
     public static final String ACTION_SIZE_FIT = "sizeFit";
     @Action(name=ACTION_SIZE_FIT, selectedProperty=PROP_SCALE_FIT)
     public void sizeFit() {
-        getImageProcessor().setScale(ImageProcessor.Scale.CUSTOM);
+        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_FIT);
+        updateLastImage();
     }
 
     public static final String ACTION_CHECK_UPDATES = "checkUpdates";
@@ -604,6 +635,13 @@ public final class Mediator implements PreferencesNames {
     private void showImage(Image img) {
         if (presenter != null)
             presenter.setImage(img);
+    }
+
+    private void updateLastImage() {
+        if (lastImage != null) {
+            updateImageProcessor(lastImage);
+            showImage(imageProcessor.process(lastImage.getValue()));
+        }
     }
 
     // We can provide configuration option for toolbar

@@ -5,7 +5,6 @@
 
 package com.mightypocket.ashoter;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -22,30 +21,14 @@ import java.awt.image.BufferedImage;
 
 final class ImageProcessor {
 
-
-    public enum Scale {
-        SMALL(0.5), ORIGINAL(1), LARGE(1.5), CUSTOM(0);
-
-        private final double factor;
-
-        private Scale(double factor) {
-            this.factor = factor;
-        }
-
-        public double getFactor() {
-            return factor;
-        }
-    }
-
     public enum Rotation {
         R0, R90, R180, R270
     }
 
     private final GraphicsConfiguration gc;
 
-    private Scale scale = Scale.ORIGINAL;
+    private double scale = 1.0;
     private Rotation rotation = Rotation.R0;
-    private Dimension customBounds;
 
     public ImageProcessor() {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -54,7 +37,7 @@ final class ImageProcessor {
     }
 
     Image process(Image source) {
-        if (scale == Scale.ORIGINAL && rotation == Rotation.R0) {
+        if (scale == 1.0 && rotation == Rotation.R0) {
             return source;
         }
 
@@ -69,15 +52,7 @@ final class ImageProcessor {
             w = t;
         }
 
-        final double factor;
-
-        if (Scale.CUSTOM == scale && w > 0 && h > 0) {
-            factor = Math.min(customBounds.getWidth() / w, customBounds.getHeight() / h);
-        } else {
-            factor = scale.getFactor();
-        }
-
-        BufferedImage target = gc.createCompatibleImage((int) (w * factor), (int) (h * factor));
+        BufferedImage target = gc.createCompatibleImage((int) (w * scale), (int) (h * scale));
 
         Graphics2D g2 = target.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -85,7 +60,7 @@ final class ImageProcessor {
         double theta = Math.PI / 2 * rotation.ordinal();
 
         AffineTransform xform = new AffineTransform();
-        xform.scale(factor, factor);
+        xform.scale(scale, scale);
         xform.translate(0.5 * w, 0.5 * h);
         xform.rotate(theta);
         if (isFlipSides) {
@@ -107,20 +82,12 @@ final class ImageProcessor {
         this.rotation = rotation;
     }
 
-    public Scale getScale() {
+    public double getScale() {
         return scale;
     }
 
-    public void setScale(Scale scale) {
+    public void setScale(double scale) {
         this.scale = scale;
-    }
-
-    public Dimension getCustomBounds() {
-        return customBounds;
-    }
-
-    public void setCustomBounds(Dimension customBounds) {
-        this.customBounds = customBounds;
     }
 
 }

@@ -5,7 +5,9 @@
 package com.mightypocket.ashoter;
 
 import com.mightypocket.swing.ImageSelection;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -15,6 +17,7 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 
@@ -26,6 +29,7 @@ public class DefaultImagePresenter extends JPanel implements ImagePresenter, Pre
     protected final JLabel imageLabel = new JLabel();
     private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
     private final Mediator mediator;
+    private final JScrollPane scrollPane;
 
     public DefaultImagePresenter(Mediator mediator) {
         imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -34,17 +38,9 @@ public class DefaultImagePresenter extends JPanel implements ImagePresenter, Pre
         imageLabel.setTransferHandler(new ImageSelection());
         this.mediator = mediator;
 
-        GroupLayout gl = new GroupLayout(this);
-        setLayout(gl);
-
-        gl.setHorizontalGroup(
-            gl.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-        );
-        gl.setVerticalGroup(
-            gl.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imageLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-        );
+        setLayout(new BorderLayout());
+        scrollPane = new JScrollPane(imageLabel);
+        add(scrollPane);
     }
 
     @Override
@@ -54,7 +50,7 @@ public class DefaultImagePresenter extends JPanel implements ImagePresenter, Pre
 
     @Override
     public Dimension getPresenterDimension() {
-        return imageLabel.getParent().getSize();
+        return scrollPane.getViewport().getSize();
     }
 
     @Override
