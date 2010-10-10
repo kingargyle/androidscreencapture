@@ -96,14 +96,16 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
     }
 
     private ImageEx fetchScreen() {
-        IDevice d = device;
+        final IDevice d = device;
+        final boolean landscape = mediator.isLandscape();
         ImageEx image = null;
         if (d != null) {
             try {
-                RawImage screenshot = mediator.isLandscape() ? device.getScreenshot().getRotated() : device.getScreenshot();
+                RawImage screenshot = landscape ? device.getScreenshot().getRotated() : device.getScreenshot();
 
                 if (screenshot != null) {
                     image = renderImage(screenshot);
+                    image.setLandscape(landscape);
                 }
 
             } catch (Exception ex) {
@@ -183,7 +185,6 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
 
         ImageEx res = new ImageEx(image);
         res.setDuplicate(duplicate);
-        res.setLandscape(mediator.isLandscape());
 
         return res;
     }

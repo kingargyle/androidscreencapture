@@ -173,19 +173,29 @@ public final class Mediator implements PreferencesNames {
     }
 
     private void updateImageProcessor(final ImageEx img) {
+        final boolean ls = isLandscape();
         if (isScaleFit()) {
             Dimension customBounds = mainPanel.getPresenter().getPresenterDimension();
-            double scale = Math.min(customBounds.getWidth() / img.getValue().getWidth(null), customBounds.getHeight() / img.getValue().getHeight(null));
+            
+            int w = img.getValue().getWidth(null);
+            int h = img.getValue().getHeight(null);
+
+            if (landscape != img.isLandscape()) {
+                final int t = w;
+                w = h;
+                h = t;
+            }
+
+            double scale = Math.min(customBounds.getWidth() / w, customBounds.getHeight() / h);
             imageProcessor.setScale(scale);
         }
-        
-        if (isLandscape() != img.isLandscape()) {
-            if (isLandscape()) {
-                imageProcessor.setRotation(isLandscape() ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
-            }
+
+        if (ls != img.isLandscape()) {
+            imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
         } else {
             imageProcessor.setRotation(ImageProcessor.Rotation.R0);
         }
+
     }
     
     private JMenuBar createMenuBar() {
@@ -431,7 +441,9 @@ public final class Mediator implements PreferencesNames {
     public static final String ACTION_LANDSCAPE = "landscape";
     @Action(name=ACTION_LANDSCAPE, selectedProperty=PROP_LANDSCAPE)
     public void landscape() {
-
+        logger.debug(ACTION_LANDSCAPE+" : "+isLandscape());
+        p.putBoolean(PREF_SCREENSHOT_LANDSCAPE, isLandscape());
+        updateLastImage();
     }
 
     public static final String ACTION_FULL_SCREEN = "fullScreen";
@@ -559,7 +571,7 @@ public final class Mediator implements PreferencesNames {
         return !devices.isEmpty();
     }
 
-    private boolean landscape = false;
+    private volatile boolean landscape = false;
     public static final String PROP_LANDSCAPE = "landscape";
     public boolean isLandscape() {
         return landscape;
@@ -584,11 +596,13 @@ public final class Mediator implements PreferencesNames {
     }
 
     private void showImage(Image img) {
+        logger.trace("showImage");
         if (presenter != null)
             presenter.setImage(img);
     }
 
     private void updateLastImage() {
+        logger.trace("updateLastImage");
         if (lastImage != null) {
             updateImageProcessor(lastImage);
             showImage(imageProcessor.process(lastImage.getValue()));
