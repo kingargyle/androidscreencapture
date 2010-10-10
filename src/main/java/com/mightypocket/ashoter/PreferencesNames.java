@@ -22,7 +22,6 @@ public interface PreferencesNames {
 
     String PREF_SCREENSHOT_LANDSCAPE = "screenshot-landscape";
     String PREF_SCREENSHOT_SCALE = "screenshot-scale";
-    String PREF_SCREENSHOT_SCALE_CUSTOM = "screenshot-scale-custom";
 
     String PREF_CHECK_UPDATES = "check-updates";
     String PREF_SHOW_ABOUT = "show-about";

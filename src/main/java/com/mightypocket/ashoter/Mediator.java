@@ -105,19 +105,12 @@ public final class Mediator implements PreferencesNames {
         //TODO Read from preferences
         setLandscape(p.getBoolean(PREF_SCREENSHOT_LANDSCAPE, false));
 
-        String scale = p.get(PREF_SCREENSHOT_SCALE, PROP_SCALE_FIT);
+        Double scale = p.getDouble(PREF_SCREENSHOT_SCALE, 0.0);
 
-        if (PROP_SCALE_FIT.equals(scale)) {
+        if (scale == 0.0) {
             setScaleFit(true);
-        } else if (PROP_SCALE_LARGE.equals(scale)) {
-            setScaleLarge(true);
-        } else if (PROP_SCALE_ORIGINAL.equals(scale)) {
-            setScaleOriginal(true);
-        } else if (PROP_SCALE_SMALL.equals(scale)) {
-            setScaleSmall(true);
         } else {
-            double scale_custom = p.getDouble(PREF_SCREENSHOT_SCALE_CUSTOM, 1.0);
-            getImageProcessor().setScale(scale_custom);
+            getImageProcessor().setScale(scale);
         }
     }
 
@@ -224,10 +217,10 @@ public final class Mediator implements PreferencesNames {
         menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_LANDSCAPE)));
         menuView.addSeparator();
         ButtonGroup scaleGroup = new ButtonGroup();
-        menuView.add(addToButtonGroup(scaleGroup, new JRadioButtonMenuItem(actionMap.get(ACTION_SIZE_ORIGINAL))));
-        menuView.add(addToButtonGroup(scaleGroup, new JRadioButtonMenuItem(actionMap.get(ACTION_SIZE_SMALL))));
-        menuView.add(addToButtonGroup(scaleGroup, new JRadioButtonMenuItem(actionMap.get(ACTION_SIZE_LARGE))));
-        menuView.add(addToButtonGroup(scaleGroup, new JRadioButtonMenuItem(actionMap.get(ACTION_SIZE_FIT))));
+        menuView.add(addToButtonGroup(scaleGroup, new JMenuItem(actionMap.get(ACTION_SIZE_ORIGINAL))));
+        menuView.add(addToButtonGroup(scaleGroup, new JMenuItem(actionMap.get(ACTION_SIZE_SMALL))));
+        menuView.add(addToButtonGroup(scaleGroup, new JMenuItem(actionMap.get(ACTION_SIZE_LARGE))));
+        menuView.add(addToButtonGroup(scaleGroup, new JCheckBoxMenuItem(actionMap.get(ACTION_SIZE_FIT))));
         menuView.addSeparator();
         menuView.add(new JMenuItem(actionMap.get(ACTION_FULL_SCREEN)));
 
@@ -448,33 +441,27 @@ public final class Mediator implements PreferencesNames {
     }
 
     public static final String ACTION_SIZE_ORIGINAL = "sizeOriginal";
-    @Action(name=ACTION_SIZE_ORIGINAL, selectedProperty=PROP_SCALE_ORIGINAL)
+    @Action(name=ACTION_SIZE_ORIGINAL)
     public void sizeOriginal() {
-        getImageProcessor().setScale(1.0);
-        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_ORIGINAL);
-        updateLastImage();
+        setScale(1.0);
     }
 
     public static final String ACTION_SIZE_LARGE = "sizeLarge";
-    @Action(name=ACTION_SIZE_LARGE, selectedProperty=PROP_SCALE_LARGE)
+    @Action(name=ACTION_SIZE_LARGE)
     public void sizeLarge() {
-        getImageProcessor().setScale(1.5);
-        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_LARGE);
-        updateLastImage();
+        setScale(1.5);
     }
 
     public static final String ACTION_SIZE_SMALL = "sizeSmall";
-    @Action(name=ACTION_SIZE_SMALL, selectedProperty=PROP_SCALE_SMALL)
+    @Action(name=ACTION_SIZE_SMALL)
     public void sizeSmall() {
-        getImageProcessor().setScale(0.5);
-        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_SMALL);
-        updateLastImage();
+        setScale(0.5);
     }
 
     public static final String ACTION_SIZE_FIT = "sizeFit";
     @Action(name=ACTION_SIZE_FIT, selectedProperty=PROP_SCALE_FIT)
     public void sizeFit() {
-        p.put(PREF_SCREENSHOT_SCALE, PROP_SCALE_FIT);
+        p.putDouble(PREF_SCREENSHOT_SCALE, 0.0);
         updateLastImage();
     }
 
@@ -584,42 +571,6 @@ public final class Mediator implements PreferencesNames {
         pcs.firePropertyChange(PROP_LANDSCAPE, oldValue, landscape);
     }
 
-    private boolean scaleSmall;
-    public static final String PROP_SCALE_SMALL = "scaleSmall";
-    public boolean isScaleSmall() {
-        return scaleSmall;
-    }
-
-    public void setScaleSmall(boolean scale) {
-        boolean oldScale = this.scaleSmall;
-        this.scaleSmall = scale;
-        pcs.firePropertyChange(PROP_SCALE_SMALL, oldScale, scale);
-    }
-
-    private boolean scaleOriginal;
-    public static final String PROP_SCALE_ORIGINAL = "scaleOriginal";
-    public boolean isScaleOriginal() {
-        return scaleOriginal;
-    }
-
-    public void setScaleOriginal(boolean scale) {
-        boolean oldScale = this.scaleOriginal;
-        this.scaleOriginal = scale;
-        pcs.firePropertyChange(PROP_SCALE_ORIGINAL, oldScale, scale);
-    }
-
-    private boolean scaleLarge;
-    public static final String PROP_SCALE_LARGE = "scaleLarge";
-    public boolean isScaleLarge() {
-        return scaleLarge;
-    }
-
-    public void setScaleLarge(boolean scale) {
-        boolean oldScale = this.scaleLarge;
-        this.scaleLarge = scale;
-        pcs.firePropertyChange(PROP_SCALE_LARGE, oldScale, scale);
-    }
-
     private boolean scaleFit;
     public static final String PROP_SCALE_FIT = "scaleFit";
     public boolean isScaleFit() {
@@ -642,6 +593,13 @@ public final class Mediator implements PreferencesNames {
             updateImageProcessor(lastImage);
             showImage(imageProcessor.process(lastImage.getValue()));
         }
+    }
+
+    private void setScale(double scale) {
+        setScaleFit(false);
+        getImageProcessor().setScale(scale);
+        p.putDouble(PREF_SCREENSHOT_SCALE, scale);
+        updateLastImage();
     }
 
     // We can provide configuration option for toolbar
