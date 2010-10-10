@@ -156,7 +156,6 @@ public final class Mediator implements PreferencesNames {
                 } else {
                     devicesGroup.clearSelection();
                 }
-
             }
         });
 
@@ -195,7 +194,6 @@ public final class Mediator implements PreferencesNames {
         } else {
             imageProcessor.setRotation(ImageProcessor.Rotation.R0);
         }
-
     }
     
     private JMenuBar createMenuBar() {
@@ -226,11 +224,13 @@ public final class Mediator implements PreferencesNames {
         JMenu menuView = new JMenu(resourceMap.getString("menu.view"));
         menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_LANDSCAPE)));
         menuView.addSeparator();
-        ButtonGroup scaleGroup = new ButtonGroup();
-        menuView.add(addToButtonGroup(scaleGroup, new JMenuItem(actionMap.get(ACTION_SIZE_ORIGINAL))));
-        menuView.add(addToButtonGroup(scaleGroup, new JMenuItem(actionMap.get(ACTION_SIZE_SMALL))));
-        menuView.add(addToButtonGroup(scaleGroup, new JMenuItem(actionMap.get(ACTION_SIZE_LARGE))));
-        menuView.add(addToButtonGroup(scaleGroup, new JCheckBoxMenuItem(actionMap.get(ACTION_SIZE_FIT))));
+        menuView.add(new JMenuItem(actionMap.get(ACTION_ZOOM_IN)));
+        menuView.add(new JMenuItem(actionMap.get(ACTION_ZOOM_OUT)));
+        menuView.addSeparator();
+        menuView.add(new JMenuItem(actionMap.get(ACTION_SIZE_ORIGINAL)));
+        menuView.add(new JMenuItem(actionMap.get(ACTION_SIZE_SMALL)));
+        menuView.add(new JMenuItem(actionMap.get(ACTION_SIZE_LARGE)));
+        menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_SIZE_FIT)));
         menuView.addSeparator();
         menuView.add(new JMenuItem(actionMap.get(ACTION_FULL_SCREEN)));
 
@@ -468,6 +468,22 @@ public final class Mediator implements PreferencesNames {
     @Action(name=ACTION_SIZE_SMALL)
     public void sizeSmall() {
         setScale(0.5);
+    }
+
+    public static final String ACTION_ZOOM_IN = "zoomIn";
+    @Action(name=ACTION_ZOOM_IN)
+    public void zoomIn() {
+        double scale = imageProcessor.getScale() * 1.1;
+        if (scale > 3.0) scale = 3.0;
+        setScale(scale);
+    }
+
+    public static final String ACTION_ZOOM_OUT = "zoomOut";
+    @Action(name=ACTION_ZOOM_OUT)
+    public void zoomOut() {
+        double scale = imageProcessor.getScale() * 0.9090909090909091;
+        if (scale < 0.1) scale = 0.1;
+        setScale(scale);
     }
 
     public static final String ACTION_SIZE_FIT = "sizeFit";
