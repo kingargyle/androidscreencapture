@@ -157,6 +157,8 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
     private ImageEx renderImage(RawImage screenshot) {
         BufferedImage image = gc.createCompatibleImage(screenshot.width, screenshot.height);
 
+        final boolean ccw = p.getBoolean(PREF_ROTATION_CCW, true);
+
         int offset = p.getInt(PREF_SAVE_SKIP_OFFSET, 0);
         int size = screenshot.width * screenshot.height;
 

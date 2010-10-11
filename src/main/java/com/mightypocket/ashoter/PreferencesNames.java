@@ -26,4 +26,6 @@ public interface PreferencesNames {
     String PREF_CHECK_UPDATES = "check-updates";
     String PREF_SHOW_ABOUT = "show-about";
 
+    String PREF_ROTATION_CCW = "rotation-ccw";
+
 }
