@@ -54,7 +54,7 @@ public final class AShoter extends SingleFrameApplication implements Preferences
         if (p.getBoolean(PREF_CHECK_UPDATES, true))
             getContext().getTaskService().execute(new UpdateChecker(mediator));
 
-        mediator.setStatus("message.ready");
+        mediator.setStatus("status.ready");
     }
 
     @Override
