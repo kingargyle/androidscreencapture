@@ -98,7 +98,7 @@
         <dependency>
             <groupId>org.jdesktop.bsaf</groupId>
             <artifactId>bsaf</artifactId>
-            <version>1.9RC5</version>
+            <version>1.9</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

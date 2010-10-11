@@ -612,13 +612,11 @@ public final class Mediator implements PreferencesNames {
     }
 
     private void showImage(Image img) {
-        logger.trace("showImage");
         if (presenter != null)
             presenter.setImage(img);
     }
 
     private void updateLastImage() {
-        logger.trace("updateLastImage");
         if (lastImage != null) {
             updateImageProcessor(lastImage);
             showImage(imageProcessor.process(lastImage.getValue()));
@@ -630,6 +628,11 @@ public final class Mediator implements PreferencesNames {
         getImageProcessor().setScale(scale);
         p.putDouble(PREF_SCREENSHOT_SCALE, scale);
         updateLastImage();
+    }
+
+    public void setStatus(String key, Object... args) {
+        String string = application.getContext().getResourceMap().getString(key, args);
+        statusBar.setMessage(string);
     }
 
     // We can provide configuration option for toolbar
