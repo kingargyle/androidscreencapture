@@ -40,6 +40,7 @@ final class ImageSaver implements PreferencesNames {
         }
         try {
             ImageIO.write((RenderedImage) img, "PNG", target);
+            mediator.setStatus("status.saved", target.getName());
         } catch (IOException ex) {
             logger.error("Cannot save image to file.", ex);
             mediator.getApplication().showErrorMessage("error.save.image", target.getPath());

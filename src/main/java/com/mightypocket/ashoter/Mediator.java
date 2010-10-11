@@ -204,7 +204,8 @@ public final class Mediator implements PreferencesNames {
 
         // Menu File
         JMenu menuFile = new JMenu(resourceMap.getString("menu.file"));
-        menuFileDevices = new JMenu(resourceMap.getString("menu.file.devices"));
+        menuFileDevices = new JMenu(resourceMap.getString("menu.file.devices.text"));
+        menuFileDevices.setIcon(resourceMap.getIcon("menu.file.devices.icon"));
         menuFile.add(menuFileDevices);
         menuBinding.addBinding( bindRead(this, PROP_DEVICES, menuFileDevices, "enabled"));
         menuFile.addSeparator();
