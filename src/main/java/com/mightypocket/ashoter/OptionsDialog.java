@@ -39,6 +39,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     private JCheckBox showAboutCheckBox;
     private JCheckBox updateCheckBox;
     private JCheckBox skipDuplicatesCheckBox;
+    private JCheckBox rotateCcwCheckBox;
     private JCheckBox saveOriginalCheckBox;
     private JSpinner offsetSpinner;
     private JPanel fsBackgroundPreview;
@@ -49,7 +50,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     public OptionsDialog(Mediator mediator) {
         super(mediator.getApplication().getMainFrame(), true);
         
-        setMinimumSize(new Dimension(500, 300));
+        setMinimumSize(new Dimension(500, 400));
         setResizable(false);
         
         this.mediator = mediator;
@@ -71,15 +72,9 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
 
         JPanel buttonsPanel = createButtonsPanel(actionMap, resourceMap);
         JPanel generalPanel = createGeneralPanel(actionMap, resourceMap);
-        JPanel fullScreenPanel = createFullScreenPanel(actionMap, resourceMap);
-        JPanel savePanel = createSavePanel(actionMap, resourceMap);
-        JPanel updatePanel = createUpdatePanel(actionMap, resourceMap);
 
         JTabbedPane pane = new JTabbedPane();
         pane.addTab(resourceMap.getString("tab.general"), generalPanel);
-        pane.addTab(resourceMap.getString("tab.fullScreen"), fullScreenPanel);
-        pane.addTab(resourceMap.getString("tab.saving"), savePanel);
-        pane.addTab(resourceMap.getString("tab.updating"), updatePanel);
 
         getRootPane().add(pane, BorderLayout.CENTER);
         getRootPane().add(buttonsPanel, BorderLayout.PAGE_END);
@@ -144,6 +139,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         //TODO p.get(PREF_DEFAULT_FILE_PREFIX, "screenshot");
         showAboutCheckBox.setSelected(p.getBoolean(PREF_SHOW_ABOUT, true));
         fsBackgroundPreview.setBackground(new Color(p.getInt(PREF_GUI_PANEL_BACKGROUND, 0)));
+        rotateCcwCheckBox.setSelected(p.getBoolean(PREF_ROTATION_CCW, true));
     }
 
     private void savePreferences() {
@@ -156,6 +152,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         p.put(PREF_ANDROID_SDK_PATH, sdkPathShowTextField.getText());
         p.put(PREF_DEFAULT_FILE_FOLDER, savePathShowTextField.getText());
         p.putInt(PREF_GUI_PANEL_BACKGROUND, fsBackgroundPreview.getBackground().getRGB());
+        p.putBoolean(PREF_ROTATION_CCW, rotateCcwCheckBox.isSelected());
         try {
             p.flush();
         } catch (BackingStoreException ex) {
@@ -188,58 +185,12 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         sdkPathShowTextField = new JTextField();
         sdkPathShowTextField.setEditable(false);
 
-        gl.setHorizontalGroup(gl.createParallelGroup()
-            .addGroup(gl.createSequentialGroup()
-                .addComponent(sdkPathLabel)
-                .addComponent(setSdkPathButton)
-                )
-            .addComponent(sdkPathShowTextField)
-            .addComponent(showLabelsInToolbarCheckBox)
-            .addComponent(showAboutCheckBox)
-            );
-        gl.setVerticalGroup(gl.createSequentialGroup()
-            .addGroup(gl.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(sdkPathLabel)
-                .addComponent(setSdkPathButton)
-                )
-            .addComponent(sdkPathShowTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-            .addComponent(showLabelsInToolbarCheckBox)
-            .addComponent(showAboutCheckBox)
-            );
-        return generalPanel;
-    }
-
-    private JPanel createFullScreenPanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
-        JPanel fullScreenPanel = new JPanel();
-        GroupLayout gl = new GroupLayout(fullScreenPanel);
-        fullScreenPanel.setLayout(gl);
-        gl.setAutoCreateGaps(true);
-        gl.setAutoCreateContainerGaps(true);
         JLabel fsBackgroundLabel = new JLabel();
         fsBackgroundLabel.setName("fsBackgroundLabel");
         fsBackgroundPreview = new JPanel();
         fsBackgroundPreview.setBorder(new LineBorder(Color.GRAY));
         fsBackgroundPreview.setPreferredSize(new Dimension(20, 10));
         JButton fsBackgroundButton = new JButton(actionMap.get(ACTION_SET_FS_BACKGROUND));
-        gl.setHorizontalGroup(gl.createSequentialGroup()
-            .addComponent(fsBackgroundLabel)
-            .addComponent(fsBackgroundPreview)
-            .addComponent(fsBackgroundButton)
-            );
-        gl.setVerticalGroup(gl.createBaselineGroup(false, true)
-            .addComponent(fsBackgroundLabel)
-            .addComponent(fsBackgroundPreview)
-            .addComponent(fsBackgroundButton)
-            );
-        return fullScreenPanel;
-    }
-
-    private JPanel createSavePanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
-        JPanel panel = new JPanel();
-        GroupLayout gl = new GroupLayout(panel);
-        panel.setLayout(gl);
-        gl.setAutoCreateContainerGaps(true);
-        gl.setAutoCreateGaps(true);
 
         JButton browseButton = new JButton(actionMap.get(ACTION_SET_DEFAULT_FOLDER));
         JLabel folderLabel = new JLabel();
@@ -255,48 +206,65 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         savePathShowTextField = new JTextField();
         savePathShowTextField.setEditable(false);
 
+        updateCheckBox = new JCheckBox();
+        updateCheckBox.setName("updateCheckBox");
+
+        rotateCcwCheckBox = new JCheckBox();
+        rotateCcwCheckBox.setName("rotateCcwCheckBox");
+
         gl.setHorizontalGroup(gl.createParallelGroup()
+            .addComponent(sdkPathLabel)
             .addGroup(gl.createSequentialGroup()
-                .addComponent(folderLabel)
+                .addComponent(sdkPathShowTextField)
+                .addComponent(setSdkPathButton)
+                )
+            .addComponent(folderLabel)
+            .addGroup(gl.createSequentialGroup()
+                .addComponent(savePathShowTextField)
                 .addComponent(browseButton)
                 )
-            .addComponent(savePathShowTextField)
+            .addComponent(showLabelsInToolbarCheckBox)
+            .addComponent(showAboutCheckBox)
+            .addComponent(rotateCcwCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createSequentialGroup()
                 .addComponent(offsetLabel)
                 .addComponent(offsetSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 )
+            .addGroup(gl.createSequentialGroup()
+                .addComponent(fsBackgroundLabel)
+                .addComponent(fsBackgroundPreview)
+                .addComponent(fsBackgroundButton)
+                )
             );
         gl.setVerticalGroup(gl.createSequentialGroup()
-            .addGroup(gl.createBaselineGroup(false, true)
-                .addComponent(folderLabel)
+            .addComponent(sdkPathLabel)
+            .addGroup(gl.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(sdkPathShowTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(setSdkPathButton)
+                )
+            .addComponent(folderLabel)
+            .addGroup(gl.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(savePathShowTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addComponent(browseButton)
                 )
-            .addComponent(savePathShowTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(showLabelsInToolbarCheckBox)
+            .addComponent(showAboutCheckBox)
+            .addComponent(rotateCcwCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createBaselineGroup(false, true)
                 .addComponent(offsetLabel)
                 .addComponent(offsetSpinner)
                 )
-
+            .addGroup(gl.createBaselineGroup(false, true)
+                .addComponent(fsBackgroundLabel)
+                .addComponent(fsBackgroundPreview)
+                .addComponent(fsBackgroundButton)
+                )
             );
-
-        return panel;
-    }
-
-    private JPanel createUpdatePanel(ApplicationActionMap actionMap, ResourceMap resourceMap) {
-        JPanel panel = new JPanel();
-        GroupLayout gl = new GroupLayout(panel);
-        gl.setAutoCreateContainerGaps(true);
-        gl.setAutoCreateGaps(true);
-        updateCheckBox = new JCheckBox();
-        updateCheckBox.setName("updateCheckBox");
-        panel.setLayout(gl);
-        gl.setHorizontalGroup(gl.createSequentialGroup().addComponent(updateCheckBox));
-        gl.setVerticalGroup(gl.createBaselineGroup(false, true).addComponent(updateCheckBox));
-        return panel;
+        return generalPanel;
     }
 
     public boolean isOk() {
