@@ -120,9 +120,7 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
         AndroidDebugBridge.init(false);
         logger.trace("create bridge");
         String adbPath = sdkPath + File.separator + "tools" + File.separator + "adb";
-        logger.debug("adbPath: {}", adbPath);
         bridge = AndroidDebugBridge.createBridge(adbPath, true);
-        logger.debug("SocketAddress: {}", AndroidDebugBridge.getSocketAddress());
         logger.trace("bridge is created");
 
         AndroidDebugBridge.addDeviceChangeListener(new AndroidDebugBridge.IDeviceChangeListener() {
