@@ -66,7 +66,7 @@ final class MainPanel extends JPanel {
         ((HTMLDocument)intro.getDocument()).setBase(AShoter.class.getResource("resources/about.html"));
         presenter = new DefaultImagePresenter(mediator);
 
-        add(intro, "intro");
+        add(new JScrollPane(intro), "intro");
         add((Component) presenter, "main");
         if(Preferences.userNodeForPackage(AShoter.class).getBoolean(PreferencesNames.PREF_SHOW_ABOUT, false)) {
             layout.first(this);
