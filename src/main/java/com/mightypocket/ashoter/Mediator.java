@@ -447,7 +447,6 @@ public final class Mediator implements PreferencesNames {
     public static final String ACTION_LANDSCAPE = "landscape";
     @Action(name=ACTION_LANDSCAPE, selectedProperty=PROP_LANDSCAPE)
     public void landscape() {
-        logger.debug(ACTION_LANDSCAPE+" : "+isLandscape());
         p.putBoolean(PREF_SCREENSHOT_LANDSCAPE, isLandscape());
         updateLastImage();
     }
