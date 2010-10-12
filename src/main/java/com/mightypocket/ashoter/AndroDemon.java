@@ -104,7 +104,7 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
                 RawImage screenshot = landscape ? device.getScreenshot().getRotated() : device.getScreenshot();
 
                 if (screenshot != null) {
-                    image = renderImage(screenshot);
+                    image = renderImage(screenshot, landscape);
                     image.setLandscape(landscape);
                 }
 
@@ -154,7 +154,7 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
         }
     }
 
-    private ImageEx renderImage(RawImage screenshot) {
+    private ImageEx renderImage(RawImage screenshot, boolean landscape) {
         BufferedImage image = gc.createCompatibleImage(screenshot.width, screenshot.height);
 
         final boolean ccw = p.getBoolean(PREF_ROTATION_CCW, true);
@@ -172,6 +172,12 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
         boolean duplicate = true;
 
         int value, pos;
+        
+        if (!ccw && landscape) {
+            index = (size - 1) * indexInc;
+            indexInc = -indexInc;
+        }
+
         for (int y = 0; y < screenshot.height; y++) {
             for (int x = 0; x < screenshot.width; x++, index += indexInc) {
                 value = screenshot.getARGB(index);

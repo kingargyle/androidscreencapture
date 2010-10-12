@@ -189,8 +189,13 @@ public final class Mediator implements PreferencesNames {
             imageProcessor.setScale(scale);
         }
 
+        final boolean ccw = p.getBoolean(PREF_ROTATION_CCW, true);
+
         if (ls != img.isLandscape()) {
-            imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
+            if (ccw)
+                imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
+            else
+                imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R90 : ImageProcessor.Rotation.R270);
         } else {
             imageProcessor.setRotation(ImageProcessor.Rotation.R0);
         }
