@@ -15,7 +15,7 @@ import org.jdesktop.application.Task;
  */
 public final class UpdateChecker extends Task<String, Void>{
     public static final String VERSION = "version [";
-    private static final String UPDATE_URL = "http://www.mightypocket.com/ashot/version.txt";
+    private static final String UPDATE_URL = "http://update-check.appspot.com/check?app=ashot";
     private final Mediator mediator;
 
     public UpdateChecker(Mediator mediator) {
