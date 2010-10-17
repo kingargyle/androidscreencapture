@@ -40,7 +40,6 @@ import org.jdesktop.beansbinding.BindingGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static com.mightypocket.utils.BindingHelper.*;
-import static com.mightypocket.utils.SwingHelper.*;
 
 /**
  *
@@ -174,7 +173,7 @@ public final class Mediator implements PreferencesNames {
     private void updateImageProcessor(final ImageEx img) {
         final boolean ls = isLandscape();
         if (isScaleFit()) {
-            Dimension customBounds = mainPanel.getPresenter().getPresenterDimension();
+            Dimension customBounds = presenter.getPresenterDimension();
             
             int w = img.getValue().getWidth(null);
             int h = img.getValue().getHeight(null);
@@ -654,5 +653,10 @@ public final class Mediator implements PreferencesNames {
         ACTION_OPTIONS,
         ACTION_ABOUT
     };
+
+    void executeAction(String actionName) {
+        application.getContext().getActionManager().getActionMap(Mediator.class, this).get(actionName).actionPerformed(
+                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+    }
 
 }

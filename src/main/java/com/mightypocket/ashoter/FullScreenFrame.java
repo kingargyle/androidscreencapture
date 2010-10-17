@@ -33,6 +33,7 @@ public class FullScreenFrame extends JFrame {
 		setUndecorated(true);
 		getContentPane().add(presenter);
 
+
         presenter.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -44,7 +45,22 @@ public class FullScreenFrame extends JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ESCAPE || evt.getKeyCode() == KeyEvent.VK_F11) {
                     hideFullScreen();
+                } else if (evt.isControlDown()) {
+                    if (evt.getKeyCode() == KeyEvent.VK_MINUS) {
+                        FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_ZOOM_OUT);
+                    } else if (evt.getKeyCode() == KeyEvent.VK_EQUALS) {
+                        FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_ZOOM_IN);
+                    } else if (evt.getKeyCode() == KeyEvent.VK_1) {
+                        FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_SIZE_ORIGINAL);
+                    } else if (evt.getKeyCode() == KeyEvent.VK_9) {
+                        FullScreenFrame.this.mediator.setScaleFit(!FullScreenFrame.this.mediator.isScaleFit());
+                        FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_SIZE_FIT);
+                    } else if (evt.getKeyCode() == KeyEvent.VK_R) {
+                        FullScreenFrame.this.mediator.setLandscape(!FullScreenFrame.this.mediator.isLandscape());
+                        FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_LANDSCAPE);
+                    }
                 }
+
             }
 
         });

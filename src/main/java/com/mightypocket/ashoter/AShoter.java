@@ -86,4 +86,5 @@ public final class AShoter extends SingleFrameApplication implements Preferences
 
         JOptionPane.showMessageDialog(getMainFrame(), message, errorTitle, JOptionPane.INFORMATION_MESSAGE);
     }
+
 }

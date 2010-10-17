@@ -7,13 +7,11 @@ package com.mightypocket.ashoter;
 import com.mightypocket.swing.ImageSelection;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.util.prefs.Preferences;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,6 +38,7 @@ public class DefaultImagePresenter extends JPanel implements ImagePresenter, Pre
 
         setLayout(new BorderLayout());
         scrollPane = new JScrollPane(imageLabel);
+        scrollPane.setBorder(null);
         add(scrollPane);
     }
 
