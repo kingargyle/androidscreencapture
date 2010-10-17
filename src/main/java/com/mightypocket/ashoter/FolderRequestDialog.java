@@ -36,8 +36,8 @@ public final class FolderRequestDialog extends JDialog {
 
 
     private FolderRequestDialog(final String oldPath, final String title, final String description) {
-        super(Application.getInstance(AShoter.class).getMainFrame(), title, true);
-        final AShoter app = Application.getInstance(AShoter.class);
+        super(Application.getInstance(AShot.class).getMainFrame(), title, true);
+        final AShot app = Application.getInstance(AShot.class);
 
         final ResourceMap resourceMap = app.getContext().getResourceMap(FolderRequestDialog.class);
         resourceMap.injectFields(this);

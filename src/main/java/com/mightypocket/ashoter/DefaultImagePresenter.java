@@ -25,7 +25,7 @@ import javax.swing.TransferHandler;
  */
 public class DefaultImagePresenter extends JPanel implements ImagePresenter, PreferencesNames {
     protected final JLabel imageLabel = new JLabel();
-    private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
+    private final Preferences p = Preferences.userNodeForPackage(AShot.class);
     private final Mediator mediator;
     private final JScrollPane scrollPane;
 

@@ -15,7 +15,7 @@ public class Main
     public static void main( String[] args )
     {
         configureLogging();
-        Application.launch(AShoter.class, args);
+        Application.launch(AShot.class, args);
     }
 
     private static void configureLogging() throws SecurityException {

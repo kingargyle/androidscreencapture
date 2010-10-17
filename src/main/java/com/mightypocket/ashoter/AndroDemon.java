@@ -27,7 +27,7 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
     public static final int CONNECTING_PAUSE = 200;
 
     private final Logger logger = LoggerFactory.getLogger(AndroDemon.class);
-    private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
+    private final Preferences p = Preferences.userNodeForPackage(AShot.class);
     private final Mediator mediator;
     private String sdkPath;
     private AndroidDebugBridge bridge;

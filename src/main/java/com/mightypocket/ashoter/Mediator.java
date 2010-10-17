@@ -47,7 +47,7 @@ import static com.mightypocket.utils.BindingHelper.*;
  */
 public final class Mediator implements PreferencesNames {
     private final Logger logger = LoggerFactory.getLogger(Mediator.class);
-    private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
+    private final Preferences p = Preferences.userNodeForPackage(AShot.class);
 
     private ImageProcessor imageProcessor = new ImageProcessor();;
     private JMenu menuFileDevices;
@@ -62,7 +62,7 @@ public final class Mediator implements PreferencesNames {
 
     // Components
     private final PropertyChangeSupport pcs;
-    private final AShoter application;
+    private final AShot application;
 
     private final JToolBar toolBar;
     private final JMenuBar menuBar;
@@ -73,7 +73,7 @@ public final class Mediator implements PreferencesNames {
     // State
     private ImageEx lastImage;
 
-    public Mediator( final AShoter application) {
+    public Mediator( final AShot application) {
         this.application = application;
 
         pcs = new SwingPropertyChangeSupport(this, true);
@@ -285,7 +285,7 @@ public final class Mediator implements PreferencesNames {
         return imageProcessor;
     }
 
-    public AShoter getApplication() {
+    public AShot getApplication() {
         return application;
     }
 

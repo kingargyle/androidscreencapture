@@ -25,7 +25,7 @@ final class ImageSaver implements PreferencesNames {
 
     private static final String PNG_EXTENSION = ".png";
     private final Mediator mediator;
-    private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
+    private final Preferences p = Preferences.userNodeForPackage(AShot.class);
     private final Logger logger = LoggerFactory.getLogger(ImageSaver.class);
     private JFileChooser fc;
 

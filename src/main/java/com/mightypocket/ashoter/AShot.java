@@ -16,9 +16,9 @@ import org.jdesktop.application.SingleFrameApplication;
  *
  * @author Illya Yalovyy
  */
-public final class AShoter extends SingleFrameApplication implements PreferencesNames {
+public final class AShot extends SingleFrameApplication implements PreferencesNames {
 
-    private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
+    private final Preferences p = Preferences.userNodeForPackage(AShot.class);
     private Mediator mediator;
 
     @Override

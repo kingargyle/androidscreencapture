@@ -4,7 +4,7 @@
  */
 package com.mightypocket.utils;
 
-import com.mightypocket.ashoter.AShoter;
+import com.mightypocket.ashoter.AShot;
 import java.io.InputStream;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
@@ -24,7 +24,7 @@ public final class ResourceHelper {
 
         InputStream is = null;
         try {
-            is = AShoter.class.getResourceAsStream("resources/"+name);
+            is = AShot.class.getResourceAsStream("resources/"+name);
             result = IOUtils.toString(is);
             Set<String> keySet = resourceMap.keySet();
             for (String key : keySet) {

@@ -32,7 +32,7 @@ import org.jdesktop.application.ResourceMap;
  */
 public final class OptionsDialog extends JDialog implements PreferencesNames {
     private final Mediator mediator;
-    private final Preferences p = Preferences.userNodeForPackage(AShoter.class);
+    private final Preferences p = Preferences.userNodeForPackage(AShot.class);
     private boolean ok;
 
     private JCheckBox showLabelsInToolbarCheckBox;
