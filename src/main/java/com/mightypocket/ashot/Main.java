@@ -2,7 +2,7 @@
  * Copyright (C) 2010 mightypocket.com. All rights reserved. Use is
  * subject to license terms.
  */
-package com.mightypocket.ashoter;
+package com.mightypocket.ashot;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;

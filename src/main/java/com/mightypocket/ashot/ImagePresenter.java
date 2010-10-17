@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.mightypocket.ashoter;
+package com.mightypocket.ashot;
 
 import java.awt.Dimension;
 import java.awt.Image;

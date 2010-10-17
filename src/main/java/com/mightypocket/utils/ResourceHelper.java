@@ -4,7 +4,7 @@
  */
 package com.mightypocket.utils;
 
-import com.mightypocket.ashoter.AShot;
+import com.mightypocket.ashot.AShot;
 import java.io.InputStream;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;

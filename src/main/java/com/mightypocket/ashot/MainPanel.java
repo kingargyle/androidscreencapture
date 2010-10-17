@@ -3,7 +3,7 @@
  * subject to license terms.
  */
 
-package com.mightypocket.ashoter;
+package com.mightypocket.ashot;
 
 import com.mightypocket.utils.ResourceHelper;
 import java.awt.CardLayout;
