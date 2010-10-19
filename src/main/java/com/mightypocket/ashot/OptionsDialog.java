@@ -36,7 +36,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     private boolean ok;
 
     private JCheckBox showLabelsInToolbarCheckBox;
-    private JCheckBox showAboutCheckBox;
     private JCheckBox updateCheckBox;
     private JCheckBox skipDuplicatesCheckBox;
     private JCheckBox rotateCcwCheckBox;
@@ -137,7 +136,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         sdkPathShowTextField.setText(p.get(PREF_ANDROID_SDK_PATH, null));
         savePathShowTextField.setText(p.get(PREF_DEFAULT_FILE_FOLDER, null));
         //TODO p.get(PREF_DEFAULT_FILE_PREFIX, "screenshot");
-        showAboutCheckBox.setSelected(p.getBoolean(PREF_SHOW_ABOUT, true));
         fsBackgroundPreview.setBackground(new Color(p.getInt(PREF_GUI_PANEL_BACKGROUND, 0)));
         rotateCcwCheckBox.setSelected(p.getBoolean(PREF_ROTATION_CCW, true));
     }
@@ -147,7 +145,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         p.putBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, showLabelsInToolbarCheckBox.isSelected());
         p.putBoolean(PREF_SAVE_ORIGINAL, saveOriginalCheckBox.isSelected());
         p.putBoolean(PREF_SAVE_SKIP_DUPLICATES, skipDuplicatesCheckBox.isSelected());
-        p.putBoolean(PREF_SHOW_ABOUT, showAboutCheckBox.isSelected());
         p.putInt(PREF_SAVE_SKIP_OFFSET, (Integer)offsetSpinner.getValue());
         p.put(PREF_ANDROID_SDK_PATH, sdkPathShowTextField.getText());
         p.put(PREF_DEFAULT_FILE_FOLDER, savePathShowTextField.getText());
@@ -180,8 +177,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         JButton setSdkPathButton = new JButton(actionMap.get(ACTION_SET_SDK_PATH));
         showLabelsInToolbarCheckBox = new JCheckBox();
         showLabelsInToolbarCheckBox.setName("showLabelsInToolbarCheckBox");
-        showAboutCheckBox = new JCheckBox();
-        showAboutCheckBox.setName("showAboutCheckBox");
         sdkPathShowTextField = new JTextField();
         sdkPathShowTextField.setEditable(false);
 
@@ -224,7 +219,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
                 .addComponent(browseButton)
                 )
             .addComponent(showLabelsInToolbarCheckBox)
-            .addComponent(showAboutCheckBox)
             .addComponent(rotateCcwCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
@@ -250,7 +244,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
                 .addComponent(browseButton)
                 )
             .addComponent(showLabelsInToolbarCheckBox)
-            .addComponent(showAboutCheckBox)
             .addComponent(rotateCcwCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)

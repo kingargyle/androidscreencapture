@@ -277,7 +277,6 @@ public final class Mediator implements PreferencesNames {
             }
         }
 
-        bar.setVisible(false);
         return bar;
     }
 

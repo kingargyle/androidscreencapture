@@ -68,12 +68,7 @@ final class MainPanel extends JPanel {
 
         add(new JScrollPane(intro), "intro");
         add((Component) presenter, "main");
-        if(Preferences.userNodeForPackage(AShot.class).getBoolean(PreferencesNames.PREF_SHOW_ABOUT, false)) {
-            layout.first(this);
-        }  else {
-            mediator.showMain();
-        }
-        
+        layout.last(this);
     }
 
     public void showIntro() {
