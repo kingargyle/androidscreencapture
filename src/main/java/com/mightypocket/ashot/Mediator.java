@@ -127,7 +127,7 @@ public final class Mediator implements PreferencesNames {
 
                     showImage(imgp);
 
-                    if (isRecording() && !(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, false) && img.isDuplicate())) {
+                    if (isRecording() && !(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, true) && img.isDuplicate())) {
                         imageSaver.saveImage((saveOriginal)?img.getValue():imgp);
                     }
 
@@ -416,7 +416,7 @@ public final class Mediator implements PreferencesNames {
     public static final String ACTION_RECORDING = "recording";
     @Action(name=ACTION_RECORDING, enabledProperty=PROP_CONNECTED, selectedProperty=PROP_RECORDING)
     public void recording() {
-
+        demon.resetLastImage();
     }
 
     public static final String ACTION_OPEN_DESTINATION_FOLDER = "openDestinationFolder";

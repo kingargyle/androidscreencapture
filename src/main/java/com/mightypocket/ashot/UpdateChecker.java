@@ -8,12 +8,15 @@ import java.io.InputStream;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
 import org.jdesktop.application.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Illya Yalovyy
  */
 public final class UpdateChecker extends Task<String, Void>{
+    private final static Logger logger = LoggerFactory.getLogger(UpdateChecker.class);
     public static final String VERSION = "version [";
     private static final String UPDATE_URL = "http://update-check.appspot.com/check?app=ashot";
     private final Mediator mediator;
@@ -24,7 +27,7 @@ public final class UpdateChecker extends Task<String, Void>{
     }
 
     public static String check() {
-        String version = "Unknown";
+        String version = null;
         try {
             URL url = new URL(UPDATE_URL);
             Object content = url.getContent();
@@ -38,6 +41,7 @@ public final class UpdateChecker extends Task<String, Void>{
                 }
             }
         } catch (Exception ex) {
+            logger.error("Cannot check for updates.", ex);
         }
 
         return version;
@@ -50,6 +54,9 @@ public final class UpdateChecker extends Task<String, Void>{
 
     @Override
     protected void succeeded(String newVersion) {
+        if (newVersion == null) {
+            mediator.setStatus("status.error.updates");
+        }
         String oldVersion = mediator.getApplication().getContext().getResourceMap().getString("Application.version");
         if (oldVersion.compareTo(newVersion) < 0) {
             mediator.getApplication().showMessage("info.newVersion", newVersion);

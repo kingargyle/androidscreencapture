@@ -131,7 +131,7 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         updateCheckBox.setSelected(p.getBoolean(PREF_CHECK_UPDATES, true));
         showLabelsInToolbarCheckBox.setSelected(p.getBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, true));
         saveOriginalCheckBox.setSelected(p.getBoolean(PREF_SAVE_ORIGINAL, true));
-        skipDuplicatesCheckBox.setSelected(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, false));
+        skipDuplicatesCheckBox.setSelected(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, true));
         offsetSpinner.setValue(p.getInt(PREF_SAVE_SKIP_OFFSET, 40));
         sdkPathShowTextField.setText(p.get(PREF_ANDROID_SDK_PATH, null));
         savePathShowTextField.setText(p.get(PREF_DEFAULT_FILE_FOLDER, null));

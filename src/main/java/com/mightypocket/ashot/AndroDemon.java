@@ -239,4 +239,8 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
             }
         }
     }
+
+    public void resetLastImage() {
+        lastRawImage = null;
+    }
 }
