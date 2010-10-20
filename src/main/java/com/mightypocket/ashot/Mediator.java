@@ -19,10 +19,12 @@ import java.util.List;
 import org.jdesktop.application.Action;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.LinkedHashMap;
 import java.util.prefs.Preferences;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -69,6 +71,7 @@ public final class Mediator implements PreferencesNames {
     private final StatusBar statusBar;
     private final MainPanel mainPanel;
     private final AndroDemon demon;
+    private final Map<String, JComponent> toolBarMap = new LinkedHashMap<String, JComponent>();
 
     // State
     private ImageEx lastImage;
@@ -189,8 +192,6 @@ public final class Mediator implements PreferencesNames {
         }
 
         final boolean ccw = p.getBoolean(PREF_ROTATION_CCW, true);
-        System.out.println("CCW:"+ccw);
-        System.out.println("img.CCW:"+img.isCcw());
 
         if (ls != img.isLandscape()) {
             if (ccw == img.isCcw()) {
@@ -273,6 +274,7 @@ public final class Mediator implements PreferencesNames {
         ApplicationActionMap actionMap = getActionMap();
         JToolBar bar = new JToolBar();
         bar.setRollover(true);
+        toolBarMap.clear();
         final boolean hideText = !p.getBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, true);
         for (String actionName : TOOLBAR) {
             if (TOOLBAR_SEPARATOR.equals(actionName)) {
@@ -280,7 +282,8 @@ public final class Mediator implements PreferencesNames {
             } else {
                 AbstractButton bt;
                 if (actionName.startsWith(TOOLBAR_TOGGLE_BUTTON)) {
-                    bt = new JToggleButton(actionMap.get(StringUtils.substring(actionName, TOOLBAR_TOGGLE_BUTTON.length())));
+                    actionName = StringUtils.substring(actionName, TOOLBAR_TOGGLE_BUTTON.length());
+                    bt = new JToggleButton(actionMap.get(actionName));
                 } else {
                     bt = new JButton(actionMap.get(actionName));
                 }
@@ -289,6 +292,7 @@ public final class Mediator implements PreferencesNames {
                 bt.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
                 bt.setHideActionText(hideText);
                 bar.add(bt);
+                toolBarMap.put(actionName, bt);
             }
         }
 
@@ -432,7 +436,13 @@ public final class Mediator implements PreferencesNames {
     @Action(name=ACTION_RECORDING, enabledProperty=PROP_CONNECTED, selectedProperty=PROP_RECORDING)
     public void recording() {
         demon.resetLastImage();
-        
+        JToggleButton bt = (JToggleButton) toolBarMap.get(ACTION_RECORDING);
+        ResourceMap resourceMap = application.getContext().getResourceMap(Mediator.class);
+        if (isRecording()) {
+            bt.setText(resourceMap.getString("recording.Action.selectedText"));
+        } else {
+            bt.setText(resourceMap.getString("recording.Action.text"));
+        }
     }
 
     public static final String ACTION_OPEN_DESTINATION_FOLDER = "openDestinationFolder";
