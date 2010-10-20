@@ -98,14 +98,16 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
     private ImageEx fetchScreen() {
         final IDevice d = device;
         final boolean landscape = mediator.isLandscape();
+        final boolean ccw = p.getBoolean(PREF_ROTATION_CCW, true);
         ImageEx image = null;
         if (d != null) {
             try {
                 RawImage screenshot = landscape ? device.getScreenshot().getRotated() : device.getScreenshot();
 
                 if (screenshot != null) {
-                    image = renderImage(screenshot, landscape);
+                    image = renderImage(screenshot, landscape, ccw);
                     image.setLandscape(landscape);
+                    image.setCcw(ccw);
                 }
 
             } catch (Exception ex) {
@@ -152,10 +154,8 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
         }
     }
 
-    private ImageEx renderImage(RawImage screenshot, boolean landscape) {
+    private ImageEx renderImage(RawImage screenshot, boolean landscape, boolean ccw) {
         BufferedImage image = gc.createCompatibleImage(screenshot.width, screenshot.height);
-
-        final boolean ccw = p.getBoolean(PREF_ROTATION_CCW, true);
 
         int offset = p.getInt(PREF_SAVE_SKIP_OFFSET, 0);
         int size = screenshot.width * screenshot.height;

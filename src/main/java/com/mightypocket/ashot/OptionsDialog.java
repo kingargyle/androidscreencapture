@@ -38,7 +38,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     private JCheckBox showLabelsInToolbarCheckBox;
     private JCheckBox updateCheckBox;
     private JCheckBox skipDuplicatesCheckBox;
-    private JCheckBox rotateCcwCheckBox;
     private JCheckBox saveOriginalCheckBox;
     private JSpinner offsetSpinner;
     private JPanel fsBackgroundPreview;
@@ -137,7 +136,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         savePathShowTextField.setText(p.get(PREF_DEFAULT_FILE_FOLDER, null));
         //TODO p.get(PREF_DEFAULT_FILE_PREFIX, "screenshot");
         fsBackgroundPreview.setBackground(new Color(p.getInt(PREF_GUI_PANEL_BACKGROUND, 0)));
-        rotateCcwCheckBox.setSelected(p.getBoolean(PREF_ROTATION_CCW, true));
     }
 
     private void savePreferences() {
@@ -149,7 +147,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         p.put(PREF_ANDROID_SDK_PATH, sdkPathShowTextField.getText());
         p.put(PREF_DEFAULT_FILE_FOLDER, savePathShowTextField.getText());
         p.putInt(PREF_GUI_PANEL_BACKGROUND, fsBackgroundPreview.getBackground().getRGB());
-        p.putBoolean(PREF_ROTATION_CCW, rotateCcwCheckBox.isSelected());
         try {
             p.flush();
         } catch (BackingStoreException ex) {
@@ -204,9 +201,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         updateCheckBox = new JCheckBox();
         updateCheckBox.setName("updateCheckBox");
 
-        rotateCcwCheckBox = new JCheckBox();
-        rotateCcwCheckBox.setName("rotateCcwCheckBox");
-
         gl.setHorizontalGroup(gl.createParallelGroup()
             .addComponent(sdkPathLabel)
             .addGroup(gl.createSequentialGroup()
@@ -219,7 +213,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
                 .addComponent(browseButton)
                 )
             .addComponent(showLabelsInToolbarCheckBox)
-            .addComponent(rotateCcwCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createSequentialGroup()
@@ -244,7 +237,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
                 .addComponent(browseButton)
                 )
             .addComponent(showLabelsInToolbarCheckBox)
-            .addComponent(rotateCcwCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createBaselineGroup(false, true)

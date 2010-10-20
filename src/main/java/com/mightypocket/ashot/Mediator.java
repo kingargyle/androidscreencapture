@@ -189,14 +189,28 @@ public final class Mediator implements PreferencesNames {
         }
 
         final boolean ccw = p.getBoolean(PREF_ROTATION_CCW, true);
+        System.out.println("CCW:"+ccw);
+        System.out.println("img.CCW:"+img.isCcw());
 
         if (ls != img.isLandscape()) {
-            if (ccw)
-                imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
-            else
-                imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R90 : ImageProcessor.Rotation.R270);
+            if (ccw == img.isCcw()) {
+                if (ccw)
+                    imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
+                else
+                    imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R90 : ImageProcessor.Rotation.R270);
+            } else {
+                if (ls) {
+                    imageProcessor.setRotation(ccw ? ImageProcessor.Rotation.R270 : ImageProcessor.Rotation.R90);
+                } else {
+                    imageProcessor.setRotation(img.isCcw() ? ImageProcessor.Rotation.R90 : ImageProcessor.Rotation.R270);
+                }
+            }
         } else {
-            imageProcessor.setRotation(ImageProcessor.Rotation.R0);
+            if (ccw == img.isCcw()) {
+                imageProcessor.setRotation(ImageProcessor.Rotation.R0);
+            } else {
+                imageProcessor.setRotation(ls ? ImageProcessor.Rotation.R180 :  ImageProcessor.Rotation.R0);
+            }
         }
     }
     
@@ -228,6 +242,7 @@ public final class Mediator implements PreferencesNames {
         // Menu View
         JMenu menuView = new JMenu(resourceMap.getString("menu.view"));
         menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_LANDSCAPE)));
+        menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_LANDSCAPE_CW)));
         menuView.addSeparator();
         menuView.add(new JMenuItem(actionMap.get(ACTION_ZOOM_IN)));
         menuView.add(new JMenuItem(actionMap.get(ACTION_ZOOM_OUT)));
@@ -417,6 +432,7 @@ public final class Mediator implements PreferencesNames {
     @Action(name=ACTION_RECORDING, enabledProperty=PROP_CONNECTED, selectedProperty=PROP_RECORDING)
     public void recording() {
         demon.resetLastImage();
+        
     }
 
     public static final String ACTION_OPEN_DESTINATION_FOLDER = "openDestinationFolder";
@@ -445,6 +461,15 @@ public final class Mediator implements PreferencesNames {
     public static final String ACTION_LANDSCAPE = "landscape";
     @Action(name=ACTION_LANDSCAPE, selectedProperty=PROP_LANDSCAPE)
     public void landscape() {
+        p.putBoolean(PREF_ROTATION_CCW, true);
+        p.putBoolean(PREF_SCREENSHOT_LANDSCAPE, isLandscape());
+        updateLastImage();
+    }
+
+    public static final String ACTION_LANDSCAPE_CW = "landscapeCW";
+    @Action(name=ACTION_LANDSCAPE_CW, selectedProperty=PROP_LANDSCAPE)
+    public void landscapeCW() {
+        p.putBoolean(PREF_ROTATION_CCW, false);
         p.putBoolean(PREF_SCREENSHOT_LANDSCAPE, isLandscape());
         updateLastImage();
     }

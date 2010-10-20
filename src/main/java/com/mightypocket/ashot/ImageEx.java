@@ -15,6 +15,7 @@ final class ImageEx {
     private Image value;
     private boolean duplicate = false;
     private boolean landscape = false;
+    private boolean ccw = true;
 
     public ImageEx(Image value) {
         if (value == null ) throw new IllegalArgumentException("Value is null!");
@@ -44,5 +45,14 @@ final class ImageEx {
     public void setLandscape(boolean landscape) {
         this.landscape = landscape;
     }
+
+    public boolean isCcw() {
+        return ccw;
+    }
+
+    public void setCcw(boolean ccw) {
+        this.ccw = ccw;
+    }
+
     
 }
