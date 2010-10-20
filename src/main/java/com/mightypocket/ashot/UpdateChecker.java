@@ -56,6 +56,7 @@ public final class UpdateChecker extends Task<String, Void>{
     protected void succeeded(String newVersion) {
         if (newVersion == null) {
             mediator.setStatus("status.error.updates");
+            return;
         }
         String oldVersion = mediator.getApplication().getContext().getResourceMap().getString("Application.version");
         if (oldVersion.compareTo(newVersion) < 0) {

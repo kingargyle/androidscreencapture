@@ -51,8 +51,9 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
     @Override
     protected Void doInBackground() throws Exception {
 
-        if (StringUtils.isBlank(sdkPath)) {
-            throw new IllegalStateException("Android SDK is not properly configured.");
+        while (StringUtils.isBlank(sdkPath)) {
+            logger.error("Android SDK is not properly configured.");
+            sleep(5000);
         }
 
         initBridge();
