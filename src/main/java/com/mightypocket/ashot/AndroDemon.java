@@ -41,8 +41,6 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
         super(mediator.getApplication());
         this.mediator = mediator;
 
-        sdkPath = p.get(PREF_ANDROID_SDK_PATH, null);
-
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gd = ge.getDefaultScreenDevice();
         gc = gd.getDefaultConfiguration();
@@ -50,10 +48,12 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
 
     @Override
     protected Void doInBackground() throws Exception {
-
+        
+        sdkPath = p.get(PREF_ANDROID_SDK_PATH, null);
         while (StringUtils.isBlank(sdkPath)) {
             logger.error("Android SDK is not properly configured.");
             sleep(5000);
+            sdkPath = p.get(PREF_ANDROID_SDK_PATH, null);
         }
 
         initBridge();
