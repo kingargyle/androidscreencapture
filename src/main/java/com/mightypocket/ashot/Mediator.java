@@ -435,6 +435,15 @@ public final class Mediator implements PreferencesNames {
     public static final String ACTION_RECORDING = "recording";
     @Action(name=ACTION_RECORDING, enabledProperty=PROP_CONNECTED, selectedProperty=PROP_RECORDING)
     public void recording() {
+        if (StringUtils.isBlank(p.get(PREF_DEFAULT_FILE_FOLDER, null))) {
+            String f = requestDefaultFolder();
+            if (StringUtils.isBlank(f)) {
+                setRecording(false);
+                return;
+            }
+            p.put(PREF_DEFAULT_FILE_FOLDER, f);
+        }
+
         demon.resetLastImage();
         JToggleButton bt = (JToggleButton) toolBarMap.get(ACTION_RECORDING);
         ResourceMap resourceMap = application.getContext().getResourceMap(Mediator.class);
@@ -673,24 +682,28 @@ public final class Mediator implements PreferencesNames {
         statusBar.setMessage(string);
     }
 
+    void executeAction(String actionName) {
+        application.getContext().getActionManager().getActionMap(Mediator.class, this).get(actionName).actionPerformed(
+                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+    }
+
+    private String requestDefaultFolder() {
+        ResourceMap resourceMap = application.getContext().getResourceMap(OptionsDialog.class);
+        return  FolderRequestDialog.requestFolderFor(p.get(PREF_DEFAULT_FILE_FOLDER, ""),
+                resourceMap.getString("save.request.title"), resourceMap.getString("save.request.desc"));
+    }
+
     // We can provide configuration option for toolbar
     // Toolbar
     private static final String TOOLBAR_SEPARATOR = "-----";
     private static final String TOOLBAR_TOGGLE_BUTTON = "TOGGLE::";
     private static final String[] TOOLBAR = {
         ACTION_SAVE_SCREENSHOT,
-        TOOLBAR_SEPARATOR,
         TOOLBAR_TOGGLE_BUTTON + ACTION_RECORDING,
+        ACTION_OPEN_DESTINATION_FOLDER,
         TOOLBAR_SEPARATOR,
         ACTION_FULL_SCREEN,
         TOOLBAR_SEPARATOR,
-        ACTION_OPTIONS,
-        ACTION_ABOUT
+        ACTION_OPTIONS
     };
-
-    void executeAction(String actionName) {
-        application.getContext().getActionManager().getActionMap(Mediator.class, this).get(actionName).actionPerformed(
-                new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
-    }
-
 }

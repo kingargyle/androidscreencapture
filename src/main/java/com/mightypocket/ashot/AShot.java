@@ -65,10 +65,10 @@ public final class AShot extends SingleFrameApplication implements PreferencesNa
     }
 
     private String askForSdkPath() {
-        ResourceMap resourceMap = getContext().getResourceMap();
+        ResourceMap resourceMap = getContext().getResourceMap(OptionsDialog.class);
         return FolderRequestDialog.requestFolderFor("", 
-                resourceMap.getString("SdkPathDialog.title"),
-                resourceMap.getString("SdkPathDialog.description"));
+                resourceMap.getString("sdk.request.title"),
+                resourceMap.getString("sdk.request.desc"));
     }
 
     void showErrorMessage(String messageKey, Object... args) {
