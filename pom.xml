@@ -1,15 +1,16 @@
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mightypocket</groupId>
   <artifactId>AShot</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <name>AShot</name>
   <url>http://sourceforge.net/projects/ashot</url>
   <scm>
-    <connection>scm:svn:https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/tags/AShot-1.0</connection>
-    <url>https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/tags/AShot-1.0</url>
+    <connection>scm:svn:https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/trunk</connection>
+    <url>https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/trunk</url>
   </scm>
   <build>
     <plugins>
@@ -39,7 +40,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>libs/</classpathPrefix>
-              <mainClass>com.mightypocket.ashot.Main</mainClass>
+              <mainClass >com.mightypocket.ashot.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -70,6 +71,13 @@
           <finalName>AndroidScreenCapture_${project.version}</finalName>
           <outputDirectory>${project.build.directory}/dist</outputDirectory>
           <workDirectory>${project.build.directory}/assembly/work</workDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <goals>assembly:assembly</goals>
         </configuration>
       </plugin>
     </plugins>
