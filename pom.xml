@@ -4,12 +4,12 @@
   <groupId>com.mightypocket</groupId>
   <artifactId>AShot</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <name>AShot</name>
   <url>http://sourceforge.net/projects/ashot</url>
   <scm>
-    <connection>scm:svn:https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/tags/AShot-1.0</connection>
-    <url>https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/tags/AShot-1.0</url>
+    <connection>scm:svn:https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/trunk</connection>
+    <url>https://ashot.svn.sourceforge.net/svnroot/ashot/ashot/trunk</url>
   </scm>
   <build>
     <plugins>
