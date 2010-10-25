@@ -57,6 +57,9 @@ public class FullScreenFrame extends JFrame {
                         FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_SIZE_FIT);
                     } else if (evt.getKeyCode() == KeyEvent.VK_R) {
                         FullScreenFrame.this.mediator.setLandscape(!FullScreenFrame.this.mediator.isLandscape());
+                        FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_LANDSCAPE_CW);
+                    } else if (evt.getKeyCode() == KeyEvent.VK_E) {
+                        FullScreenFrame.this.mediator.setLandscape(!FullScreenFrame.this.mediator.isLandscape());
                         FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_LANDSCAPE);
                     }
                 }
