@@ -75,3 +75,21 @@ java.nio.channels.ClosedByInterruptException: null
 2010-10-26 12:36:35,308 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
 2010-10-26 12:36:57,622 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
 2010-10-26 12:37:25,314 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 15:55:36,140 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 15:55:36,168 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 15:55:36,268 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 15:55:36,274 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 15:55:36,318 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 15:55:54,415 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:368] stopDemon
+2010-10-26 16:08:34,425 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 16:08:34,448 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 16:08:34,547 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 16:08:34,553 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 16:08:34,600 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 16:08:41,265 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:368] stopDemon
+2010-10-26 16:09:43,138 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 16:09:43,180 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 16:09:43,266 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 16:09:43,272 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 16:09:43,318 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 16:10:13,519 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:368] stopDemon
