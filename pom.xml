@@ -81,6 +81,11 @@
     </plugins>
     <resources>
       <resource>
+        <directory>src/docs</directory>
+        <filtering>true</filtering>
+        <targetPath>${project.build.directory}</targetPath>
+      </resource>
+      <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
         <includes>
