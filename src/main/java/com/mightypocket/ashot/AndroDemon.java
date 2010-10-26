@@ -130,7 +130,7 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
 
             @Override
             public void deviceConnected(IDevice device) {
-                logger.trace("deviceConnected: {}", device);
+                logger.info("deviceConnected: {}", device);
                 addDevice(device);
             }
 

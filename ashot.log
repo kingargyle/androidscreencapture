@@ -1,0 +1,19 @@
+2010-10-26 11:55:43,098 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:122] initBridge
+2010-10-26 11:55:43,120 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] create bridge
+2010-10-26 11:55:43,235 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:127] bridge is created
+2010-10-26 11:57:28,941 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:133] deviceConnected: HT035P901391
+2010-10-26 11:57:29,938 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:145] deviceChanged: HT035P901391 - 1
+2010-10-26 11:57:30,029 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:145] deviceChanged: HT035P901391 - 4
+2010-10-26 11:57:53,462 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 11:58:37,724 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:122] initBridge
+2010-10-26 11:58:37,751 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] create bridge
+2010-10-26 11:58:37,870 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:127] bridge is created
+2010-10-26 11:58:37,880 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:133] deviceConnected: HT035P901391
+2010-10-26 11:58:37,925 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:145] deviceChanged: HT035P901391 - 4
+2010-10-26 11:58:59,301 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 11:59:29,732 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:122] initBridge
+2010-10-26 11:59:29,761 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] create bridge
+2010-10-26 11:59:29,859 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:127] bridge is created
+2010-10-26 11:59:29,865 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:133] deviceConnected: HT035P901391
+2010-10-26 11:59:29,909 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:145] deviceChanged: HT035P901391 - 4
+2010-10-26 11:59:47,224 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
