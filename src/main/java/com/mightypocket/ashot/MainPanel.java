@@ -9,7 +9,6 @@ import com.mightypocket.utils.ResourceHelper;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;

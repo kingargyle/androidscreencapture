@@ -237,8 +237,6 @@ public final class Mediator implements PreferencesNames {
         // Menu Edit
         JMenu menuEdit = new JMenu(resourceMap.getString("menu.edit"));
         menuEdit.add(new JMenuItem(actionMap.get(ACTION_COPY_TO_CLIPBOARD)));
-        menuEdit.addSeparator();
-        menuEdit.add(new JMenuItem(actionMap.get(ACTION_OPTIONS)));
 
         // Menu View
         JMenu menuView = new JMenu(resourceMap.getString("menu.view"));
@@ -254,6 +252,12 @@ public final class Mediator implements PreferencesNames {
         menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_SIZE_FIT)));
         menuView.addSeparator();
         menuView.add(new JMenuItem(actionMap.get(ACTION_FULL_SCREEN)));
+        
+        // Menu Tools
+        JMenu toolsView = new JMenu(resourceMap.getString("menu.tools"));
+        toolsView.add(new JMenuItem(actionMap.get(ACTION_INSTALL)));
+        toolsView.addSeparator();
+        toolsView.add(new JMenuItem(actionMap.get(ACTION_OPTIONS)));
 
         // Menu Help
         JMenu menuHelp = new JMenu(resourceMap.getString("menu.help"));
@@ -263,6 +267,7 @@ public final class Mediator implements PreferencesNames {
         bar.add(menuFile);
         bar.add(menuEdit);
         bar.add(menuView);
+        bar.add(toolsView);
         bar.add(menuHelp);
         
         menuBinding.bind();
@@ -541,7 +546,7 @@ public final class Mediator implements PreferencesNames {
     }
 
     public static final String ACTION_CHECK_UPDATES = "checkUpdates";
-    @Action(name=ACTION_CHECK_UPDATES, block=Task.BlockingScope.ACTION)
+    @Action(name=ACTION_CHECK_UPDATES, block=Task.BlockingScope.WINDOW)
     public Task checkUpdates() {
         return new UpdateChecker(this);
     }
@@ -553,6 +558,11 @@ public final class Mediator implements PreferencesNames {
         mainPanel.showIntro();
     }
 
+    public static final String ACTION_INSTALL = "install";
+    @Action(name = ACTION_INSTALL, block=Task.BlockingScope.WINDOW, enabledProperty=PROP_CONNECTED)
+    public void install() {
+
+    }
     // Properties
 
     private String connectedDevice;
