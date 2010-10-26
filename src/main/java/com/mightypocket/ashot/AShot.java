@@ -4,6 +4,7 @@
  */
 package com.mightypocket.ashot;
 
+import com.mightypocket.utils.AndroidSdkHelper;
 import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import javax.swing.JOptionPane;
@@ -44,8 +45,13 @@ public final class AShot extends SingleFrameApplication implements PreferencesNa
     @Override
     protected void ready() {
         String sdkPath = p.get(PREF_ANDROID_SDK_PATH, null);
-        if (StringUtils.isBlank(sdkPath)) {
-            sdkPath = askForSdkPath();
+        if (!AndroidSdkHelper.validatePath(sdkPath)) {
+            do {
+                sdkPath = askForSdkPath(sdkPath);
+                if (StringUtils.isBlank(sdkPath)) exit();
+                if (!AndroidSdkHelper.validatePath(sdkPath))
+                    showErrorMessage("error.sdk");
+            } while (!AndroidSdkHelper.validatePath(sdkPath));
             p.put(PREF_ANDROID_SDK_PATH, sdkPath);
         }
 
@@ -64,9 +70,9 @@ public final class AShot extends SingleFrameApplication implements PreferencesNa
 
     }
 
-    private String askForSdkPath() {
+    private String askForSdkPath(String sdkPath) {
         ResourceMap resourceMap = getContext().getResourceMap(OptionsDialog.class);
-        return FolderRequestDialog.requestFolderFor("", 
+        return FolderRequestDialog.requestFolderFor(sdkPath,
                 resourceMap.getString("sdk.request.title"),
                 resourceMap.getString("sdk.request.desc"));
     }

@@ -17,3 +17,61 @@
 2010-10-26 11:59:29,865 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:133] deviceConnected: HT035P901391
 2010-10-26 11:59:29,909 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:145] deviceChanged: HT035P901391 - 4
 2010-10-26 11:59:47,224 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:22:28,060 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 12:22:28,087 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 12:22:28,186 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 12:22:28,193 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 12:22:28,242 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 12:22:45,568 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:22:45,589 ERROR [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:117] 
+java.nio.channels.ClosedByInterruptException: null
+	at java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:184) ~[na:1.6.0_20]
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:263) ~[na:1.6.0_20]
+	at com.android.ddmlib.AdbHelper.read(AdbHelper.java:640) ~[ddmlib-1.0.jar:na]
+	at com.android.ddmlib.AdbHelper.read(AdbHelper.java:616) ~[ddmlib-1.0.jar:na]
+	at com.android.ddmlib.AdbHelper.getFrameBuffer(AdbHelper.java:326) ~[ddmlib-1.0.jar:na]
+	at com.android.ddmlib.Device.getScreenshot(Device.java:271) ~[ddmlib-1.0.jar:na]
+	at com.mightypocket.ashot.AndroDemon.fetchScreen(AndroDemon.java:108) [classes/:na]
+	at com.mightypocket.ashot.AndroDemon.doInBackground(AndroDemon.java:73) [classes/:na]
+	at com.mightypocket.ashot.AndroDemon.doInBackground(AndroDemon.java:27) [classes/:na]
+	at javax.swing.SwingWorker$1.call(SwingWorker.java:277) [na:1.6.0_20]
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303) [na:1.6.0_20]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138) [na:1.6.0_20]
+	at javax.swing.SwingWorker.run(SwingWorker.java:316) [na:1.6.0_20]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886) [na:1.6.0_20]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908) [na:1.6.0_20]
+	at java.lang.Thread.run(Thread.java:619) [na:1.6.0_20]
+2010-10-26 12:23:52,868 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:25:56,934 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 12:25:56,964 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 12:25:57,050 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 12:25:57,057 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 12:25:57,111 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 12:27:05,078 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:27:35,030 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 12:27:35,060 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 12:27:35,156 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 12:27:35,163 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 12:27:35,235 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 12:27:44,311 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:29:02,093 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 12:29:02,116 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 12:29:02,210 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 12:29:02,216 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 12:29:02,260 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 12:29:03,990 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:30:23,882 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:30:35,560 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 12:30:35,590 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 12:30:35,673 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 12:30:35,678 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 12:30:35,723 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 12:33:17,225 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:36:31,223 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-26 12:36:31,251 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-26 12:36:31,351 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-26 12:36:31,357 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-26 12:36:31,406 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-26 12:36:35,308 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:36:57,622 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon
+2010-10-26 12:37:25,314 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:363] stopDemon

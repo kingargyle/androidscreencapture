@@ -4,6 +4,7 @@
  */
 package com.mightypocket.ashot;
 
+import com.mightypocket.utils.AndroidSdkHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -101,7 +102,11 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         String folder = FolderRequestDialog.requestFolderFor(sdkPathShowTextField.getText(),
                 resourceMap.getString("sdk.request.title"), resourceMap.getString("sdk.request.desc"));
         if (StringUtils.isNotBlank(folder)) {
-            sdkPathShowTextField.setText(folder);
+            if (AndroidSdkHelper.validatePath(folder)) {
+                sdkPathShowTextField.setText(folder);
+            } else {
+                mediator.getApplication().showErrorMessage("error.sdk");
+            }
         }
     }
 

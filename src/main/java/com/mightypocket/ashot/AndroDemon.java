@@ -7,6 +7,7 @@ package com.mightypocket.ashot;
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
 import com.android.ddmlib.RawImage;
+import com.mightypocket.utils.AndroidSdkHelper;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -50,9 +51,10 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
     protected Void doInBackground() throws Exception {
         
         sdkPath = p.get(PREF_ANDROID_SDK_PATH, null);
-        while (StringUtils.isBlank(sdkPath)) {
+        while (!AndroidSdkHelper.validatePath(sdkPath)) {
             logger.error("Android SDK is not properly configured.");
-            sleep(5000);
+            mediator.setStatus("status.error.sdk");
+            sleep(10000);
             sdkPath = p.get(PREF_ANDROID_SDK_PATH, null);
         }
 

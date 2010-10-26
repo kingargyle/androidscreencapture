@@ -41,12 +41,10 @@ public final class FolderRequestDialog extends JDialog {
 
         final ResourceMap resourceMap = app.getContext().getResourceMap(FolderRequestDialog.class);
         resourceMap.injectFields(this);
-
+        setResizable(false);
         this.title = title;
 
         setModal(true);
-
-        setLocationRelativeTo(app.getMainFrame());
 
         labelDescription = new JLabel(description);
         textFieldPath = new JTextField(oldPath);
@@ -95,6 +93,7 @@ public final class FolderRequestDialog extends JDialog {
         );
 
         pack();
+        setLocationRelativeTo(app.getMainFrame());
     }
 
     public static final String ACTION_OK = "actionOk";
@@ -132,6 +131,6 @@ public final class FolderRequestDialog extends JDialog {
         d.setVisible(true);
         d.removeAll();
         d.dispose();
-        return d.ok?d.textFieldPath.getText():oldPath;
+        return d.ok?d.textFieldPath.getText():null;
     }
 }
