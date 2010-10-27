@@ -4,6 +4,7 @@
  */
 package com.mightypocket.ashot;
 
+import com.mightypocket.utils.AndroidSdkHelper;
 import java.awt.Dimension;
 import org.jdesktop.application.Task;
 import javax.swing.AbstractButton;
@@ -231,6 +232,9 @@ public final class Mediator implements PreferencesNames {
         menuFile.add(new JMenuItem(actionMap.get(ACTION_SAVE_SCREENSHOT)));
         menuFile.add(new JCheckBoxMenuItem(actionMap.get(ACTION_RECORDING)));
         menuFile.add(new JMenuItem(actionMap.get(ACTION_OPEN_DESTINATION_FOLDER)));
+        menuFile.addSeparator();
+        menuFile.add(new JMenuItem(actionMap.get(ACTION_CHANGE_DEFAULT_FOLDER)));
+        menuFile.add(new JMenuItem(actionMap.get(ACTION_CHANGE_SDK_FOLDER)));
         menuFile.addSeparator();
         menuFile.add(new JMenuItem(actionMap.get("quit")));
 
@@ -563,6 +567,35 @@ public final class Mediator implements PreferencesNames {
     public void install() {
 
     }
+
+    public static final String ACTION_CHANGE_DEFAULT_FOLDER = "changeDefaultFolder";
+    @Action(name = ACTION_CHANGE_DEFAULT_FOLDER)
+    public void changeDefaultFolder() {
+        ResourceMap resourceMap = application.getContext().getResourceMap(Mediator.class);
+        String folder = FolderRequestDialog.requestFolderFor(p.get(PREF_DEFAULT_FILE_FOLDER, null),
+                resourceMap.getString("save.request.title"), resourceMap.getString("save.request.desc"));
+        if (StringUtils.isNotBlank(folder)) {
+            p.put(PREF_DEFAULT_FILE_FOLDER, folder);
+        }
+    }
+
+    public static final String ACTION_CHANGE_SDK_FOLDER = "changeSdkFolder";
+    @Action(name = ACTION_CHANGE_SDK_FOLDER)
+    public void changeSdkFolder() {
+        ResourceMap resourceMap = application.getContext().getResourceMap(OptionsDialog.class);
+        String folder = FolderRequestDialog.requestFolderFor(p.get(PREF_ANDROID_SDK_PATH, null),
+                resourceMap.getString("sdk.request.title"), resourceMap.getString("sdk.request.desc"));
+        if (StringUtils.isNotBlank(folder)) {
+            if (AndroidSdkHelper.validatePath(folder)) {
+                p.put(PREF_ANDROID_SDK_PATH, folder);
+            } else {
+                application.showErrorMessage("error.sdk");
+            }
+        }
+    }
+
+
+
     // Properties
 
     private String connectedDevice;
