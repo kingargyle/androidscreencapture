@@ -115,6 +115,8 @@ public final class Mediator implements PreferencesNames {
         } else {
             getImageProcessor().setScale(scale);
         }
+
+        setShowToolbarLabels(p.getBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, true));
     }
 
     private void installListeners() {
@@ -244,12 +246,13 @@ public final class Mediator implements PreferencesNames {
 
         // Menu View
         JMenu menuView = new JMenu(resourceMap.getString("menu.view"));
+        menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_SHOW_TOOLBAR_LABELS)));
+        menuView.addSeparator();
         menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_LANDSCAPE)));
         menuView.add(new JCheckBoxMenuItem(actionMap.get(ACTION_LANDSCAPE_CW)));
         menuView.addSeparator();
         menuView.add(new JMenuItem(actionMap.get(ACTION_ZOOM_IN)));
         menuView.add(new JMenuItem(actionMap.get(ACTION_ZOOM_OUT)));
-        menuView.addSeparator();
         menuView.add(new JMenuItem(actionMap.get(ACTION_SIZE_ORIGINAL)));
         menuView.add(new JMenuItem(actionMap.get(ACTION_SIZE_SMALL)));
         menuView.add(new JMenuItem(actionMap.get(ACTION_SIZE_LARGE)));
@@ -594,6 +597,13 @@ public final class Mediator implements PreferencesNames {
         }
     }
 
+    public static final String ACTION_SHOW_TOOLBAR_LABELS = "showToolbarLables";
+    @Action(name = ACTION_SHOW_TOOLBAR_LABELS, selectedProperty=PROP_SHOW_TOOLBAR_LABELS)
+    public void showToolbarLables() {
+        boolean state = isShowToolbarLabels();
+        p.putBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, state);
+        updateToolbarLabels(!state);
+    }
 
 
     // Properties
@@ -701,6 +711,22 @@ public final class Mediator implements PreferencesNames {
         pcs.firePropertyChange(PROP_SCALE_FIT, oldScaleFit, scaleFit);
     }
 
+    protected boolean showToolbarLabels = true;
+    public static final String PROP_SHOW_TOOLBAR_LABELS = "showToolbarLabels";
+
+    public boolean isShowToolbarLabels() {
+        return showToolbarLabels;
+    }
+
+    public void setShowToolbarLabels(boolean showToolbarLabels) {
+        boolean oldShowToolbarLabels = this.showToolbarLabels;
+        this.showToolbarLabels = showToolbarLabels;
+        pcs.firePropertyChange(PROP_SHOW_TOOLBAR_LABELS, oldShowToolbarLabels, showToolbarLabels);
+    }
+
+
+    // internal methods
+
     private void showImage(Image img) {
         if (presenter != null)
             presenter.setImage(img);
@@ -734,6 +760,14 @@ public final class Mediator implements PreferencesNames {
         ResourceMap resourceMap = application.getContext().getResourceMap(OptionsDialog.class);
         return  FolderRequestDialog.requestFolderFor(p.get(PREF_DEFAULT_FILE_FOLDER, ""),
                 resourceMap.getString("save.request.title"), resourceMap.getString("save.request.desc"));
+    }
+
+    private void updateToolbarLabels(boolean state) {
+        for (JComponent bt : toolBarMap.values()) {
+            if (bt instanceof AbstractButton) {
+                ((AbstractButton)bt).setHideActionText(state);
+            }
+        }
     }
 
     // We can provide configuration option for toolbar

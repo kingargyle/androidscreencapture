@@ -4,7 +4,6 @@
  */
 package com.mightypocket.ashot;
 
-import com.mightypocket.utils.AndroidSdkHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,10 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
-import org.apache.commons.lang.StringUtils;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.ResourceMap;
@@ -36,7 +33,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
     private final Preferences p = Preferences.userNodeForPackage(AShot.class);
     private boolean ok;
 
-    private JCheckBox showLabelsInToolbarCheckBox;
     private JCheckBox updateCheckBox;
     private JCheckBox skipDuplicatesCheckBox;
     private JCheckBox saveOriginalCheckBox;
@@ -105,7 +101,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
 
     private void loadPreferences() {
         updateCheckBox.setSelected(p.getBoolean(PREF_CHECK_UPDATES, true));
-        showLabelsInToolbarCheckBox.setSelected(p.getBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, true));
         saveOriginalCheckBox.setSelected(p.getBoolean(PREF_SAVE_ORIGINAL, true));
         skipDuplicatesCheckBox.setSelected(p.getBoolean(PREF_SAVE_SKIP_DUPLICATES, true));
         offsetSpinner.setValue(p.getInt(PREF_SAVE_SKIP_OFFSET, 40));
@@ -114,7 +109,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
 
     private void savePreferences() {
         p.putBoolean(PREF_CHECK_UPDATES, updateCheckBox.isSelected());
-        p.putBoolean(PREF_GUI_SHOW_TEXT_IN_TOOLBAR, showLabelsInToolbarCheckBox.isSelected());
         p.putBoolean(PREF_SAVE_ORIGINAL, saveOriginalCheckBox.isSelected());
         p.putBoolean(PREF_SAVE_SKIP_DUPLICATES, skipDuplicatesCheckBox.isSelected());
         p.putInt(PREF_SAVE_SKIP_OFFSET, (Integer)offsetSpinner.getValue());
@@ -141,9 +135,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
 
-        showLabelsInToolbarCheckBox = new JCheckBox();
-        showLabelsInToolbarCheckBox.setName("showLabelsInToolbarCheckBox");
-
         JLabel fsBackgroundLabel = new JLabel();
         fsBackgroundLabel.setName("fsBackgroundLabel");
         fsBackgroundPreview = new JPanel();
@@ -164,7 +155,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
         updateCheckBox.setName("updateCheckBox");
 
         gl.setHorizontalGroup(gl.createParallelGroup()
-            .addComponent(showLabelsInToolbarCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createSequentialGroup()
@@ -178,7 +168,6 @@ public final class OptionsDialog extends JDialog implements PreferencesNames {
                 )
             );
         gl.setVerticalGroup(gl.createSequentialGroup()
-            .addComponent(showLabelsInToolbarCheckBox)
             .addComponent(saveOriginalCheckBox)
             .addComponent(skipDuplicatesCheckBox)
             .addGroup(gl.createBaselineGroup(false, true)
