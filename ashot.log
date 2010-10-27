@@ -111,3 +111,27 @@ java.nio.channels.ClosedByInterruptException: null
 2010-10-27 12:40:18,060 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
 2010-10-27 12:40:18,104 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
 2010-10-27 12:40:45,902 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:372] stopDemon
+2010-10-27 15:14:57,929 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-27 15:14:57,969 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-27 15:14:58,063 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-27 15:14:58,069 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-27 15:14:58,113 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-27 15:15:35,019 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:375] stopDemon
+2010-10-27 15:15:42,043 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-27 15:15:42,088 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-27 15:15:42,177 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-27 15:15:42,183 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-27 15:15:42,227 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-27 15:15:53,540 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:375] stopDemon
+2010-10-27 15:16:34,861 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-27 15:16:34,899 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-27 15:16:34,987 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-27 15:16:34,994 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-27 15:16:35,044 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-27 15:16:59,318 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:375] stopDemon
+2010-10-27 15:17:11,823 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:124] initBridge
+2010-10-27 15:17:11,863 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:126] create bridge
+2010-10-27 15:17:11,959 TRACE [pool-1-thread-1] c.m.a.AndroDemon [AndroDemon.java:129] bridge is created
+2010-10-27 15:17:11,965 INFO [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:135] deviceConnected: HT035P901391
+2010-10-27 15:17:12,010 TRACE [Device List Monitor] c.m.a.AndroDemon [AndroDemon.java:147] deviceChanged: HT035P901391 - 4
+2010-10-27 15:17:16,094 TRACE [AWT-EventQueue-0] c.m.a.Mediator [Mediator.java:375] stopDemon
