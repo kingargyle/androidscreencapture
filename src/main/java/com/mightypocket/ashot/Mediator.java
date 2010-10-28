@@ -571,7 +571,12 @@ public final class Mediator implements PreferencesNames {
         ResourceMap resourceMap = application.getContext().getResourceMap(Mediator.class);
         String path = FolderRequestDialog.requestFolderFor("", resourceMap.getString("dialog.installfile.title"),
                 resourceMap.getString("dialog.installfile.desc"));
-        return new AppInstaller(this, new File(path));
+        
+        if (StringUtils.isNotBlank(path)) {
+            return new AppInstaller(this, new File(path));
+        } else {
+            return null;
+        }
     }
 
     public static final String ACTION_CHANGE_DEFAULT_FOLDER = "changeDefaultFolder";
