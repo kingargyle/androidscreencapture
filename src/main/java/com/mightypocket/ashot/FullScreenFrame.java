@@ -45,7 +45,7 @@ public class FullScreenFrame extends JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ESCAPE || evt.getKeyCode() == KeyEvent.VK_F11) {
                     hideFullScreen();
-                } else if (evt.isControlDown()) {
+                } else if (evt.isControlDown() || evt.isMetaDown()) {
                     if (evt.getKeyCode() == KeyEvent.VK_MINUS) {
                         FullScreenFrame.this.mediator.executeAction(Mediator.ACTION_ZOOM_OUT);
                     } else if (evt.getKeyCode() == KeyEvent.VK_EQUALS) {
