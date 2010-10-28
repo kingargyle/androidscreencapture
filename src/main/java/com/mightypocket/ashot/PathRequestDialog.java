@@ -11,6 +11,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
@@ -21,7 +23,7 @@ import org.jdesktop.application.ResourceMap;
  *
  * @author Illya Yalovyy
  */
-public final class FolderRequestDialog extends JDialog {
+public final class PathRequestDialog extends JDialog {
 
     JLabel labelDescription;
     JTextField textFieldPath;
@@ -33,13 +35,15 @@ public final class FolderRequestDialog extends JDialog {
     @Resource public String openButtonName;
 
     private final String title;
+    private final boolean selectFolder;
+    private FileFilter fileFilter;
 
 
-    private FolderRequestDialog(final String oldPath, final String title, final String description) {
+    private PathRequestDialog(final String oldPath, final String title, final String description, boolean selectFolder) {
         super(Application.getInstance(AShot.class).getMainFrame(), title, true);
         final AShot app = Application.getInstance(AShot.class);
 
-        final ResourceMap resourceMap = app.getContext().getResourceMap(FolderRequestDialog.class);
+        final ResourceMap resourceMap = app.getContext().getResourceMap(PathRequestDialog.class);
         resourceMap.injectFields(this);
         setResizable(false);
         this.title = title;
@@ -94,6 +98,7 @@ public final class FolderRequestDialog extends JDialog {
 
         pack();
         setLocationRelativeTo(app.getMainFrame());
+        this.selectFolder = selectFolder;
     }
 
     public static final String ACTION_OK = "actionOk";
@@ -116,8 +121,10 @@ public final class FolderRequestDialog extends JDialog {
         JFileChooser chooser = new JFileChooser(textFieldPath.getText());
         chooser.setApproveButtonText(openButtonName);
         chooser.setDialogTitle(title);
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setFileSelectionMode((selectFolder)?JFileChooser.DIRECTORIES_ONLY:JFileChooser.FILES_ONLY);
         chooser.setMultiSelectionEnabled(false);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (fileFilter != null) chooser.setFileFilter(fileFilter);
         int res = chooser.showOpenDialog(this);
         if (res == JFileChooser.APPROVE_OPTION) {
             textFieldPath.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -125,12 +132,27 @@ public final class FolderRequestDialog extends JDialog {
 
     }
 
+    private void createApkFilter() {
+        fileFilter = new FileNameExtensionFilter("Android application", "apk");
+    }
+
     static String requestFolderFor(String oldPath, String title, String description) {
-        FolderRequestDialog d = new FolderRequestDialog(oldPath, title, description);
+        PathRequestDialog d = new PathRequestDialog(oldPath, title, description, true);
 
         d.setVisible(true);
         d.removeAll();
         d.dispose();
         return d.ok?d.textFieldPath.getText():null;
     }
+
+    static String requestFileFor(String oldPath, String title, String description) {
+        PathRequestDialog d = new PathRequestDialog(oldPath, title, description, false);
+
+        d.createApkFilter();
+        d.setVisible(true);
+        d.removeAll();
+        d.dispose();
+        return d.ok?d.textFieldPath.getText():null;
+    }
+
 }

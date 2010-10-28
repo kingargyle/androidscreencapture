@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.jdesktop.application.Resource;
 import org.jdesktop.application.ResourceMap;
@@ -124,8 +125,14 @@ final class StatusBar extends JPanel {
 
     }
 
-    public void setMessage(String message) {
-        statusMessageLabel.setText(message);
-        messageTimer.restart();
+    public void setMessage(final String message) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                statusMessageLabel.setText(message);
+                messageTimer.restart();
+            }
+        });
     }
 }

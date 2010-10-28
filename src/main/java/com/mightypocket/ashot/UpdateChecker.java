@@ -49,6 +49,7 @@ public final class UpdateChecker extends Task<String, Void>{
 
     @Override
     protected String doInBackground() throws Exception {
+        mediator.setStatus("status.start.updates");
         return check();
     }
 

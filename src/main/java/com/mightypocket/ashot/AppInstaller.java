@@ -20,6 +20,8 @@ public class AppInstaller extends Task<Void,Void> {
         super(mediator.getApplication());
         this.mediator = mediator;
         this.file = file;
+
+        setUserCanCancel(false);
     }
 
     @Override
@@ -30,6 +32,8 @@ public class AppInstaller extends Task<Void,Void> {
         String connectedDevice = mediator.getConnectedDevice();
 
         final String absolutePath = file.getAbsolutePath();
+        final String fileName = file.getName();
+        mediator.setStatus("status.install.file", fileName);
         if (file.exists() && file.isFile() && file.canRead()) {
 
             for (IDevice iDevice : devices) {
@@ -45,7 +49,7 @@ public class AppInstaller extends Task<Void,Void> {
                 logger.error("Cannot find device: {}", connectedDevice);
                 mediator.setStatus("status.error.install.device", connectedDevice);
             }
-            mediator.setStatus("status.info.install");
+            mediator.setStatus("status.install");
         } else {
             logger.error("Cannot access file: {}", absolutePath);
             mediator.setStatus("status.error.install.file", file.getAbsolutePath());
@@ -57,6 +61,6 @@ public class AppInstaller extends Task<Void,Void> {
 
     @Override
     protected void failed(Throwable cause) {
-
+        mediator.getApplication().showErrorMessage("error.install.file");
     }
 }

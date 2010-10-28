@@ -569,7 +569,7 @@ public final class Mediator implements PreferencesNames {
     @Action(name = ACTION_INSTALL, block=Task.BlockingScope.WINDOW, enabledProperty=PROP_CONNECTED)
     public Task install() {
         ResourceMap resourceMap = application.getContext().getResourceMap(Mediator.class);
-        String path = FolderRequestDialog.requestFolderFor("", resourceMap.getString("dialog.installfile.title"),
+        String path = PathRequestDialog.requestFileFor("", resourceMap.getString("dialog.installfile.title"),
                 resourceMap.getString("dialog.installfile.desc"));
         
         if (StringUtils.isNotBlank(path)) {
@@ -583,7 +583,7 @@ public final class Mediator implements PreferencesNames {
     @Action(name = ACTION_CHANGE_DEFAULT_FOLDER)
     public void changeDefaultFolder() {
         ResourceMap resourceMap = application.getContext().getResourceMap(Mediator.class);
-        String folder = FolderRequestDialog.requestFolderFor(p.get(PREF_DEFAULT_FILE_FOLDER, null),
+        String folder = PathRequestDialog.requestFolderFor(p.get(PREF_DEFAULT_FILE_FOLDER, null),
                 resourceMap.getString("save.request.title"), resourceMap.getString("save.request.desc"));
         if (StringUtils.isNotBlank(folder)) {
             p.put(PREF_DEFAULT_FILE_FOLDER, folder);
@@ -594,7 +594,7 @@ public final class Mediator implements PreferencesNames {
     @Action(name = ACTION_CHANGE_SDK_FOLDER)
     public void changeSdkFolder() {
         ResourceMap resourceMap = application.getContext().getResourceMap(OptionsDialog.class);
-        String folder = FolderRequestDialog.requestFolderFor(p.get(PREF_ANDROID_SDK_PATH, null),
+        String folder = PathRequestDialog.requestFolderFor(p.get(PREF_ANDROID_SDK_PATH, null),
                 resourceMap.getString("sdk.request.title"), resourceMap.getString("sdk.request.desc"));
         if (StringUtils.isNotBlank(folder)) {
             if (AndroidSdkHelper.validatePath(folder)) {
@@ -766,7 +766,7 @@ public final class Mediator implements PreferencesNames {
 
     private String requestDefaultFolder() {
         ResourceMap resourceMap = application.getContext().getResourceMap(OptionsDialog.class);
-        return  FolderRequestDialog.requestFolderFor(p.get(PREF_DEFAULT_FILE_FOLDER, ""),
+        return  PathRequestDialog.requestFolderFor(p.get(PREF_DEFAULT_FILE_FOLDER, ""),
                 resourceMap.getString("save.request.title"), resourceMap.getString("save.request.desc"));
     }
 
