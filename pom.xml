@@ -83,7 +83,7 @@
       <resource>
         <directory>src/docs</directory>
         <filtering>true</filtering>
-        <targetPath>${project.build.directory}</targetPath>
+        <targetPath>../</targetPath>
       </resource>
       <resource>
         <directory>src/main/resources</directory>

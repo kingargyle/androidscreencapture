@@ -45,12 +45,18 @@ public class AppInstaller extends Task<Void,Void> {
                 logger.error("Cannot find device: {}", connectedDevice);
                 mediator.setStatus("status.error.install.device", connectedDevice);
             }
+            mediator.setStatus("status.info.install");
         } else {
             logger.error("Cannot access file: {}", absolutePath);
             mediator.setStatus("status.error.install.file", file.getAbsolutePath());
+            throw new IllegalArgumentException("Package installation failed");
         }
 
         return null;
     }
 
+    @Override
+    protected void failed(Throwable cause) {
+
+    }
 }

@@ -567,8 +567,11 @@ public final class Mediator implements PreferencesNames {
 
     public static final String ACTION_INSTALL = "install";
     @Action(name = ACTION_INSTALL, block=Task.BlockingScope.WINDOW, enabledProperty=PROP_CONNECTED)
-    public void install() {
-
+    public Task install() {
+        ResourceMap resourceMap = application.getContext().getResourceMap(Mediator.class);
+        String path = FolderRequestDialog.requestFolderFor("", resourceMap.getString("dialog.installfile.title"),
+                resourceMap.getString("dialog.installfile.desc"));
+        return new AppInstaller(this, new File(path));
     }
 
     public static final String ACTION_CHANGE_DEFAULT_FOLDER = "changeDefaultFolder";

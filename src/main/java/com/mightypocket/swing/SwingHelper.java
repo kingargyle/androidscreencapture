@@ -3,7 +3,7 @@
  * subject to license terms.
  */
 
-package com.mightypocket.utils;
+package com.mightypocket.swing;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
