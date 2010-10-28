@@ -27,7 +27,7 @@ readme file:
 
    AShot-1.0.jar
 
-and provide the path to Android SDK in Edit -> Options...
+and provide the path to Android SDK in File -> Android SDK path...
 
 You are all set!
 

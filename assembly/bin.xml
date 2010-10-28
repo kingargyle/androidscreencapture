@@ -17,6 +17,7 @@
             <outputDirectory></outputDirectory>
             <includes>
                 <include>*.jar</include>
+                <include>readme.txt</include>
             </includes>
         </fileSet>
         <fileSet>
