@@ -335,7 +335,7 @@ public final class Mediator implements PreferencesNames {
         return toolBar;
     }
 
-    public ImageEx getLastImage() {
+    ImageEx getLastImage() {
         return lastImage;
     }
 
@@ -411,7 +411,7 @@ public final class Mediator implements PreferencesNames {
                     public void run() {
                         JRadioButtonMenuItem item = devices.get(deviceStr);
                         devicesGroup.remove(item);
-                        devices.remove(item);
+                        devices.remove(item.getText());
                         menuFileDevices.remove(item);
                         pcs.firePropertyChange(PROP_DEVICES, null, null);
                     }

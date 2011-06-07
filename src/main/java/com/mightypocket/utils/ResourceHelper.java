@@ -9,12 +9,16 @@ import java.io.InputStream;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.jdesktop.application.ResourceMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Illya Yalovyy
  */
 public final class ResourceHelper {
+    
+    private static final Logger logger = LoggerFactory.getLogger(ResourceHelper.class);
 
     private ResourceHelper() {
     }
@@ -35,8 +39,8 @@ public final class ResourceHelper {
                 }
             }
         } catch (Exception e) {
-            //should neve be a case
-            e.printStackTrace();
+            //should never be a case
+            logger.error ("Cannot load resource", e);
         } finally {
             IOUtils.closeQuietly(is);
         }

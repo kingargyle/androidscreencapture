@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames {
     public static final int CONNECTING_PAUSE = 200;
+    static final ImageEx[] EMPTY_ARRAY = new ImageEx[0];
 
     private final Logger logger = LoggerFactory.getLogger(AndroDemon.class);
     private final Preferences p = Preferences.userNodeForPackage(AShot.class);
@@ -76,7 +77,7 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
                 }
             }
 
-            process((img == null)?Collections.EMPTY_LIST:Collections.singletonList(img));
+            publish((img == null)?EMPTY_ARRAY:new ImageEx[] {img});
         }
 
         return null;
@@ -124,7 +125,7 @@ public class AndroDemon extends Task<Void, ImageEx> implements PreferencesNames 
         logger.trace("initBridge");
         AndroidDebugBridge.init(false);
         logger.trace("create bridge");
-        String adbPath = sdkPath + File.separator + "tools" + File.separator + "adb";
+        String adbPath = sdkPath + File.separator + "platform-tools" + File.separator + "adb";
         bridge = AndroidDebugBridge.createBridge(adbPath, true);
         logger.trace("bridge is created");
 
